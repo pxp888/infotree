@@ -7,7 +7,22 @@
     <h1>Hi! You are not logged in.</h1>
 {% else %}
     
+    <div class="treelist">
+        <h2>Tree List</h2>
+        <ul>
+            {% for tree in trees %}
+                <p>tree.topic</p>
+            {% endfor %}
+        </ul>
+    </div>
 
+    <div class="branchlist">
+        <ul>
+            {% for branch in branches %}
+                <p>branch.subject</p>
+            {% endfor %}
+        </ul>
+    </div>
 
 {% endif %}
 {% endblock %}

@@ -17,9 +17,23 @@ class Tree(models.Model):
         return self.topic
 
 
+class Branch(models.Model):
+    id = models.AutoField(primary_key=True)
+    tree = models.ForeignKey(Tree, on_delete=models.CASCADE, related_name='branches')
+    subject = models.CharField(max_length=300)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_on']
+
+    def __str__(self):
+        return self.subject
+
+
 class Node(models.Model):
     id = models.AutoField(primary_key=True)
     tree = models.ForeignKey(Tree, on_delete=models.CASCADE, related_name='nodes')
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='nodes')
     base = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     subject = models.CharField(max_length=200)
     content = models.TextField()
