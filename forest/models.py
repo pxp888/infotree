@@ -33,7 +33,7 @@ class Node(models.Model):
         return self.subject
 
 
-class targets(models.Model):
+class Target(models.Model):
     id = models.AutoField(primary_key=True)
     basenode = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='basetargets')
     target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='targets')

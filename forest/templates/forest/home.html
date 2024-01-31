@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+{% if not user.is_authenticated %}
+    <h1>Hi! You are not logged in.</h1>
+{% else %}
+    
+
+
+{% endif %}
+{% endblock %}
+
