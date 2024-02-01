@@ -2,5 +2,28 @@ body {
     font-family: Roboto, sans-serif;
 }
 
+.genericForm1 {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+}
 
 
+.genericForm1 textarea {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    min-height: 300px;
+}
+
+
+.branchid, .treeid, .nodeid {
+    color: blue;
+}
+
+
+.bvnode {
+    background-color: rgb(209, 209, 209);
+}
+
+.bvnode.sentmessage {
+    background-color: rgb(243, 132, 132);
+}

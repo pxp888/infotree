@@ -3,27 +3,30 @@
 
 
 {% block content %}
-{% if not user.is_authenticated %}
-    <h1>Hi! You are not logged in.</h1>
-{% else %}
-    
+
     <div class="treelist">
-        <h2>Tree List</h2>
+        <h2>my Trees</h2>
         <ul>
             {% for tree in trees %}
-                <p>tree.topic</p>
+                <li>
+                    <p>{{ tree.topic }}</p>
+                    <p class="treeid">{{ tree.id }}</p>
+                </li>
             {% endfor %}
         </ul>
     </div>
 
     <div class="branchlist">
+        <h2>my Branches</h2>
         <ul>
             {% for branch in branches %}
-                <p>branch.subject</p>
+            <li>
+                <a href="{% url 'branchview' branch.id %}">{{ branch.subject }}</a>
+            </li>
             {% endfor %}
         </ul>
     </div>
 
-{% endif %}
+
 {% endblock %}
 

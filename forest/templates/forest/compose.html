@@ -3,12 +3,24 @@
 
 
 {% block content %}    
-{% if not user.is_authenticated %}
-    <h1>Hi! You are not logged in.</h1>
-{% else %}
-    <h1>Compose new message</h1>
 
+    <h1>Start new tree</h1>
+    <h2>{{msg}}</h2>
+
+    <form method="POST" class="genericForm1" id="composeForm">
+        {% csrf_token %}
+        <label for="Topic">Tree Topic</label>
+        <input type="text" name="Topic" placeholder="Topic" required value="{{topic}}">
+        <label for="Subject">Branch Subject</label>
+        <input type="text" name="Subject" placeholder="Subject" required value="{{subject}}">
+        <label for="Recipient">Recipient</label>
+        <input type="text" name="Recipient" placeholder="Recipient" required>
+        <label for="Body">Body</label>
+        <textarea name="Body" placeholder="">{{bodycontent}}</textarea>
+        <input type="submit" value="Send">
+    </form>
     
-{% endif %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/compose.js' %}"></script>
 {% endblock %}
 
