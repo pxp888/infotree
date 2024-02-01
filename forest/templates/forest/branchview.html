@@ -3,34 +3,42 @@
 
 
 {% block content %}
-    <h2>branch view</h2>
+    <h3>{{ tree.topic }}</h3>
     <h3>{{ msg }}</h3>
-    <h3>{{ branch.subject }}</h3>
+    <h4>{{ branch.subject }}</h4>
+    <h4>{{ branch.members }}</h4>
+    <p id="branchid">{{ branch.id }}</p>
+    
+    <hr>
+
     <div class="bvnodelist">
         {% for node in nodes %}
-            <div class="bvnode {% if node.sender.username == user.username %}sentmessage{% endif %}">
-                <p class="node_sender">{{ node.sender }}</p>
-                <p class="created_on">{{ node.created_on }}</p>
-                <p class="node_content">{{ node.content }}</p>
-                <p class="node_id">{{ node.id }}</p>
-            </div>
+        <div class="bvnode {% if user.username == node.sender.username %}sentmessage{% endif %}">
+            <p>{{ node.sender }}</p>
+            <p class="created_on">{{ node.created_on }}</p>
+            <p>{{ node.content }}</p>
+        </div>
         {% endfor %}
     </div>
 
-    <hr>
-
-    <h2>Reply</h2>
-    <form method="POST" class="genericForm1" id="replyform">
+    <form method="post" class="genericForm1" id="quickreply">
         {% csrf_token %}
-        <label for="Subject">Branch Subject</label>
-        <input type="text" name="Subject" placeholder="Subject" value="{{ branch.subject }}">
-        <label for="Recipient">Recipient</label>
-        <input type="text" name="Recipient" placeholder="Recipient" required>
-        <textarea name="Body" placeholder="">{{bodycontent}}</textarea>
-        <input type="hidden" name="ParentBranch" value="{{ branch.id }}">
-        <input type="hidden" name="ParentNode" id="ParentNode" value="">
+        <input type="hidden" name="type" value="quickreply">
+        <input type="hidden" name="branch" value="{{ branch.id }}">
+        <textarea name="Body" placeholder=""></textarea>
         <input type="submit" value="Send">
     </form>
+
+
+    <!-- <form method="post" class="genericForm1">
+        {% csrf_token %}
+        <label for="Subject">Subject: </label>
+        <input type="text" name="Subject" placeholder="Subject">
+        <label for="Members">Members: </label>
+        <input type="text" name="Members" placeholder="Members">
+        <input type="button" action="submit" value="New Branch">
+    </form> -->
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/branchview.js' %}"></script>

@@ -1,19 +1,66 @@
 const say = (...msgs) => console.log(...msgs);
 
-const replyForm = document.getElementById('replyform');
-
-replyForm.addEventListener('submit', function(event) {
-    if (event.target.tagName === 'INPUT') {
-        event.preventDefault();
-    }
+$(document).ready(function() {
+    const div = $('.bvnodelist');
+    div.scrollTop(div.prop('scrollHeight'));
 });
 
 
-function setparentnode() {
-    let nid = $('.node_id').last().html();
-    $("#ParentNode").val(nid);
+function check_branch() {
+    const currentUrl = window.location.href;
+    const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+    const branchId = $('#branchId').val();
+
+    $.ajax({
+        url: currentUrl,
+        type: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
+        data: {
+            'type': 'check_branch',
+            'branchId': branchId,
+        },
+        success: function(response) {
+            if (response.status === true) {
+                location.reload();
+            }
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
 }
 
 
-setparentnode();
+
+
+function update() {
+    const currentUrl = window.location.href;
+    const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+    const branchId = $('#branchId').val();
+
+    $.ajax({
+        url: currentUrl,
+        type: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
+        data: {
+            'type': 'update',
+            'branchId': branchId,
+        },
+        success: function(response) {
+            if (response.status === true) {
+                location.reload();
+            }
+        },
+        error: function(error) {
+            console.error(error);
+        }
+    });
+}
+
+setInterval(update, 10000);
+
 

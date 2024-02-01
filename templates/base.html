@@ -5,7 +5,6 @@
 {% url 'account_signup' as signup_url %}
 
 
-
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 
@@ -19,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
 </head>
 
 <body>
@@ -29,7 +29,7 @@
             <li><a href="{% url 'home' %}">Home</a></li>
             {% if user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a></li>
-                <li class="nav-item"><a class="nav-link {% if request.path == compose %}active{% endif %}" aria-current="page" href="{% url 'compose' %}">New Message</a></li>
+                <li class="nav-item"><a class="nav-link {% if request.path == compose %}active{% endif %}" aria-current="page" href="{% url 'compose' %}">New Tree</a></li>
 
             {% else %}
                 <li class="nav-item"><a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page" href="{% url 'account_signup' %}">Register</a></li>

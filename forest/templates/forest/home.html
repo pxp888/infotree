@@ -20,13 +20,25 @@
         <h2>my Branches</h2>
         <ul>
             {% for branch in branches %}
-            <li>
-                <a href="{% url 'branchview' branch.id %}">{{ branch.subject }}</a>
-            </li>
+                <li>
+                    <a href="{% url 'branchview'  branch.id %}">{{ branch.tree.topic }} {{ branch.subject }}</a>
+                    <p class="branchid">{{ branch.id }}</p>
+                </li>
             {% endfor %}
         </ul>
     </div>
 
+    <div class="unreadlist">
+        <h2>Unread Branches</h2>
+        <ul>
+            {% for branch in unread %}
+                <li>
+                    <a href="{% url 'branchview'  branch.id %}">{{ branch.tree.topic }} {{ branch.subject }}</a>
+                    <p class="branchid">{{ branch.id }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
 {% endblock %}
 
