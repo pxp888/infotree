@@ -37,8 +37,29 @@ def branchview(request, id):
         recipients = request.POST.get('Recipient')
         recipients = recipients.split(',')
         recipients = [x.strip() for x in recipients]
-        subject = request.POST.get('Subject')
+        getters = []
+        for recipient in recipients:
+            user = getUser(recipient)
+            if user is None:
+                return render(request, 'forest/compose.html', {'msg': 'User ' + recipient + ' does not exist'})
+            else:
+                getters.append(user)
         
+        subject = request.POST.get('Subject')
+        ParentBranch = request.POST.get('ParentBranch')
+        body = request.POST.get('Body')
+        ParentNode = request.POST.get('ParentNode')
+        print('ParentNode', ParentNode)
+
+        sender = getUser(request.user.username)
+        branch = Branch.objects.get(pk=ParentBranch)
+        tree = branch.tree
+        node = Node(content=body, sender=sender, branch=branch)
+        node.save()
+        for getter in getters:
+            target = Target(node=node, target=getter)
+            target.save()
+
 
     try:
         branch = Branch.objects.get(pk=id)
