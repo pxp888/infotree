@@ -14,7 +14,7 @@
     <div class="bvnodelist">
         {% for node in nodes %}
         <div class="bvnode {% if user.username == node.sender.username %}sentmessage{% endif %}">
-            <p>{{ node.sender }}</p>
+            <p class="node_sender">{{ node.sender }}</p>
             <p class="created_on">{{ node.created_on }}</p>
             <p>{{ node.content }}</p>
         </div>

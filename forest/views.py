@@ -111,6 +111,8 @@ def compose(request):
         return render(request, 'forest/compose.html')
 
 
+'''Helper functions'''
+
 def getUser(username):
     try:
         user = User.objects.get(username=username)

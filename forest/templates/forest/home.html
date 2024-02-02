@@ -10,7 +10,7 @@
             {% for tree in trees %}
                 <li>
                     <p>{{ tree.topic }}</p>
-                    <p class="treeid">{{ tree.id }}</p>
+                    <!-- <p class="treeid">{{ tree.id }}</p> -->
                 </li>
             {% endfor %}
         </ul>
@@ -21,8 +21,8 @@
         <ul>
             {% for branch in branches %}
                 <li>
-                    <a href="{% url 'branchview'  branch.id %}">{{ branch.tree.topic }} {{ branch.subject }}</a>
-                    <p class="branchid">{{ branch.id }}</p>
+                    <a href="{% url 'branchview'  branch.id %}">{{ branch.tree.topic }} >>> {{ branch.subject }}</a>
+                    <!-- <p class="branchid">{{ branch.id }}</p> -->
                 </li>
             {% endfor %}
         </ul>
@@ -33,8 +33,8 @@
         <ul>
             {% for branch in unread %}
                 <li>
-                    <a href="{% url 'branchview'  branch.id %}">{{ branch.tree.topic }} {{ branch.subject }}</a>
-                    <p class="branchid">{{ branch.id }}</p>
+                    <a href="{% url 'branchview'  branch.id %}">{{ branch.tree.topic }} >>> {{ branch.subject }}</a>
+                    <!-- <p class="branchid">{{ branch.id }}</p> -->
                 </li>
             {% endfor %}
         </ul>
