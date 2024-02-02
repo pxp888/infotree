@@ -23,11 +23,11 @@
 
 <body>
     <h1>infoTrees</h1>
-    <h2>{{ user.username }}</h2>
+    <h2 class="username">{{ user.username }}</h2>
     <nav>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
             {% if user.is_authenticated %}
+                <li><a href="{% url 'home' %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a></li>
                 <li class="nav-item"><a class="nav-link {% if request.path == compose %}active{% endif %}" aria-current="page" href="{% url 'compose' %}">New Tree</a></li>
 

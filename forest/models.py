@@ -34,7 +34,8 @@ class Branch(models.Model):
 class Node(models.Model):
     id = models.AutoField(primary_key=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='nodes')
-    base = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    base = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='base_nodes')
+    arrow = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='arrow_nodes')
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)

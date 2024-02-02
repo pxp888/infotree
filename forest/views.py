@@ -5,12 +5,24 @@ from django.core.cache import cache
 
 from .models import Tree, Branch, Node, Target
 
+funcs = {}
+
 
 # Create your views here.
 def homepage(request):
     if not request.user.is_authenticated:
         return render(request, 'forest/landing.html')
     
+    if request.method == 'POST':
+        ptype = request.POST.get('ptype')
+        try:
+            return funcs[ptype](request)
+        except KeyError:
+            response = {
+                'Key Error': True,
+            }
+            return JsonResponse(response)
+
     myTrees = {}
     myBranches = {}
     
@@ -29,62 +41,10 @@ def homepage(request):
     # print(unread)
 
     context = {
-        'branches':myBranches.values(), 
         'trees':myTrees.values(), 
         }
 
     return render(request, 'forest/home.html', context)
-
-
-def branchview(request, id):
-    if not request.user.is_authenticated:
-        return render(request, 'forest/landing.html')
-    
-    if request.method == 'POST':
-        if request.POST.get('type')=='quickreply':
-            content = request.POST.get('Body')
-            branch = get_object_or_404(Branch, id=id)
-            node = Node(branch=branch, sender=request.user, content=content)
-            node.save()
-            makeTargets(node, branch)
-            return redirect('branchview', id=id)
-
-    if request.POST.get('type')=='update':
-        status = cache.get(f'status_{request.user.username}')
-
-        if status is None:
-            status = True
-            try:
-                branch = get_object_or_404(Branch, id=id)
-                targets = Target.objects.filter(target=request.user, branch=branch, read=False)
-            except Target.DoesNotExist:
-                status = False
-            if len(targets) == 0:
-                status = False
-            cache.set(f'status_{request.user.username}', status, 60*5)
-
-        response = {
-            'status': status,
-        }
-        return JsonResponse(response)
-
-
-    branch = get_object_or_404(Branch, id=id)
-    tree = branch.tree
-    nodes = Node.objects.filter(branch=branch)
-                
-    targets = Target.objects.filter(target=request.user, branch=branch)
-    for target in targets:
-        target.read = True
-        target.save()
-
-    context = {
-        'tree': tree,
-        'branch': branch,
-        'nodes': nodes,
-    }
-    cache.delete(f'status_{request.user.username}')
-    return render(request, 'forest/branchview.html', context)
 
 
 def compose(request):
@@ -133,3 +93,53 @@ def makeTargets(node, branch):
             target.save()
             cache.delete(f'status_{member}')
 
+
+
+def get_branches(request):
+    tree_id = int(request.POST.get('tree_id'))
+    tree = Tree.objects.get(id=tree_id)
+    branches = Branch.objects.filter(tree=tree)
+    id_list = []
+    subject_list = []
+    member_list = []
+    for branch in branches:
+        id_list.append(branch.id)
+        subject_list.append(branch.subject)
+        member_list.append(branch.members)
+
+    response = {
+        'id_list': id_list,
+        'subject_list': subject_list,
+        'member_list': member_list,
+    }
+    return JsonResponse(response)
+
+
+def get_nodes(request):
+    branch_id = int(request.POST.get('branch_id'))
+    branch = Branch.objects.get(id=branch_id)
+    nodes = Node.objects.filter(branch=branch)
+    id_list = []
+    for node in nodes:
+        id_list.append(node.id)
+
+    response = {
+        'id_list': id_list,
+    }
+    return JsonResponse(response)
+
+
+def get_node(request):
+    node_id = int(request.POST.get('node_id'))
+    node = Node.objects.get(id=node_id)
+    response = {
+        'content': node.content,
+        'sender': node.sender.username,
+        'created_on': node.created_on,
+    }
+    return JsonResponse(response)
+
+
+funcs['get_branches'] = get_branches
+funcs['get_nodes'] = get_nodes
+funcs['get_node'] = get_node

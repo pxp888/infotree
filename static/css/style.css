@@ -18,16 +18,29 @@ body {
 }
 
 
-.branchid, .treeid, .nodeid {
+.branch_id, .tree_id, .node_id, .hiddenform {
+    display: none;
     color: blue;
 }
 
-.bvnodelist {
+
+.listitem {
+    border-radius: .5rem;
+    padding: .5rem;
+    border: 1px solid rgb(190, 190, 190);
+    margin: .5rem;
+}
+
+.listitem p {
+    margin: 0;
+}
+
+.nodelist {
     overflow-y: auto;
     max-height: 60vh;
 }
 
-.bvnode {
+.node {
     
     background-color: white;
     margin: .5rem 5rem .5rem .5rem ;
@@ -39,27 +52,28 @@ body {
     border: 1px solid rgb(190, 190, 190);
 }
 
-.bvnode.sentmessage {
+.node.sentmessage {
     background-color: rgb(235, 235, 235);
     margin: .5rem .5rem .5rem 5rem ;
 }
 
-.bvnode .created_on {
+.node .created_on {
     text-align: right;
     font-size: 12px;
 }
 
-.bvnode .content {
+.node .content {
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
-.bvnode .node_sender {
+.node .node_sender {
     font-weight: bold;
     font-size: 12px;
 }
 
-.bvnode .node_id {
+.node .node_id {
     display: none;
     color: blue;
 }
+
