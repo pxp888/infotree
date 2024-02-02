@@ -21,7 +21,7 @@
                 {% endfor %}
             </div>
 
-            <form action="POST" class="treeform genericForm2">
+            <form action="POST" class="genericForm2" id="treeform">
                 {% csrf_token %}
                 <label for="Topic">Topic: </label>
                 <input type="text" name="Topic" id="tree_topic_input">
@@ -40,13 +40,13 @@
                     </div>
                 {% endfor %}
             </div>
-            <form action="POST" class="branchform genericForm2">
+            <form action="POST" class="genericForm2" id="branchform">
                 {% csrf_token %}
                 <label for="Subject">Subject: </label>
                 <input type="text" name="Subject" id="branch_subject_input">
                 <label for="Members">Members: </label>
                 <input type="text" name="Members" id="branch_members_input">
-                <input type="submit" value="Create">
+                <input type="submit" value="Create" id="branchform_send">
             </form>
         </div>
 
@@ -65,10 +65,10 @@
                 {% endfor %}
             </div>
 
-            <form action="POST" class="quickreplyform genericForm2">
+            <form action="POST" class="genericForm2" id="quickreplyform">
                 {% csrf_token %}
-                <textarea name="Body" id="Body" placeholder="type your message here ..."></textarea>
-                <input type="submit" value="send">
+                <textarea name="Body" id="quickreply_body" placeholder="type your message here ..."></textarea>
+                <input type="submit" value="send" id="quickreply_send">
             </form>
         </div>
     </div>

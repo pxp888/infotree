@@ -34,14 +34,13 @@ body {
 #mains {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
-    /* grid-gap: 1rem; */
 }
 
 
 
 
 .branch_id, .tree_id, .node_id, .hiddenform {
-    display: none;
+    /* display: none; */
     color: blue;
 }
 
@@ -105,10 +104,8 @@ body {
 }
 
 .node .node_id {
-    display: none;
-    color: blue;
+    grid-column-end: 3;
 }
-
 
 
 .branch {

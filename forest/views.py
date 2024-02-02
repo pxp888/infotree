@@ -95,6 +95,7 @@ def makeTargets(node, branch):
 
 '''AJAX functions'''
 
+
 def get_branches(request):
     tree_id = int(request.POST.get('tree_id'))
     tree = Tree.objects.get(id=tree_id)
@@ -132,14 +133,92 @@ def get_nodes(request):
 def get_node(request):
     node_id = int(request.POST.get('node_id'))
     node = Node.objects.get(id=node_id)
+    try:
+        target = Target.objects.get(node=node, target=request.user)
+        target.read = True
+        target.save()
+        cache.delete(f'status_{request.user.username}')
+    except Target.DoesNotExist:
+        pass
     response = {
         'content': node.content,
         'sender': node.sender.username,
         'created_on': node.created_on,
+        'node_id': node.id,
     }
     return JsonResponse(response)
+
+
+def quick_reply(request):
+    branch_id = int(request.POST.get('branch_id'))
+    content = request.POST.get('content')
+    
+    branch = Branch.objects.get(id=branch_id)
+    node = Node(branch=branch, sender=request.user, content=content)
+    node.save()
+    makeTargets(node, branch)
+
+    response = {
+        'status': 'unread_node',
+        'branch_id': branch.id,
+        'node_id': node.id,
+    }
+    return JsonResponse(response)
+
+
+def new_branch(request):
+    tree_id = int(request.POST.get('tree_id'))
+    subject = request.POST.get('subject')
+    members = request.POST.get('members')
+
+    users = members.split(',')
+    for user in users:
+        user = user.strip()
+        if getUser(user) is None:
+            response = {
+                'status': 'user_not_found',
+                'username': user,
+            }
+            return JsonResponse(response)
+
+    tree = Tree.objects.get(id=tree_id)
+    branch = Branch(tree=tree, subject=subject, members=members)
+    branch.save()
+
+    response = {
+        'status': 'new_branch',
+        'branch_id': branch.id,
+    }
+    return JsonResponse(response)
+
+
+def update_branch(request):
+    user = request.user
+    branch_id = int(request.POST.get('branch_id'))
+    unread = []
+    
+    status = cache.get(f'status_{request.user.username}')
+    if status is None:
+        branch = Branch.objects.get(id=branch_id)
+        targets = Target.objects.filter(target=user, branch=branch, read=False)
+        for target in targets:
+            unread.append(target.node.id)
+
+        response = {
+            'branch_id': branch.id,
+            'unread': unread,
+        }
+        cache.set(f'status_{request.user.username}', response, 60*5)
+        print('cache miss', response)
+        return JsonResponse(response)
+    else:
+        print('cache hit', status)
+        return JsonResponse(status)
 
 
 funcs['get_branches'] = get_branches
 funcs['get_nodes'] = get_nodes
 funcs['get_node'] = get_node
+funcs['quick_reply'] = quick_reply
+funcs['new_branch'] = new_branch
+funcs['update_branch'] = update_branch
