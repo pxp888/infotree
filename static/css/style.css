@@ -1,10 +1,12 @@
 body {
     font-family: Roboto, sans-serif;
+    /* background-color: rgb(243, 241, 237); */
 }
 
 .genericForm1 {
     display: grid;
-    grid-template-columns: 150px 1fr;
+    grid-template-columns: 120px 1fr;
+    margin: .5rem;
 }
 
 .genericForm1 textarea {
@@ -17,12 +19,19 @@ body {
     grid-column-start: 1;
 }
 
+.genericForm2 {
+    display: flex;
+    flex-direction: column;
+}
+
+
 
 #mains {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
-    grid-gap: 1rem;
+    /* grid-gap: 1rem; */
 }
+
 
 
 
@@ -31,14 +40,19 @@ body {
     color: blue;
 }
 
+
+
 .itemlist {
     overflow-y: auto;
-    max-height: 60vh;
+    height: 60vh;
     background-color: rgb(243, 241, 237);
+    border: 1px solid rgb(190, 190, 190);
+    margin: .5rem;
 }
 
 
 .listitem {
+    background-color: white;
     border-radius: .5rem;
     padding: .5rem;
     border: 1px solid rgb(190, 190, 190);
@@ -53,11 +67,7 @@ body {
 
 
 
-
-
 .node {
-    
-    background-color: white;
     margin: .5rem 5rem .5rem .5rem ;
 
     display: grid;
@@ -72,7 +82,7 @@ body {
     margin: .5rem .5rem .5rem 5rem ;
 }
 
-.node .created_on {
+.node .node_created_on {
     text-align: right;
     font-size: 12px;
 }
@@ -91,4 +101,13 @@ body {
     display: none;
     color: blue;
 }
+
+
+
+.branch {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 

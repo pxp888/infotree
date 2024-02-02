@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
+
 
 {% block content %}
 <p>{{ msg }}</p>
@@ -29,6 +33,14 @@
                     </div>
                 {% endfor %}
             </div>
+            <form action="POST" class="branchform genericForm1">
+                {% csrf_token %}
+                <label for="Subject">Subject: </label>
+                <input type="text" name="Subject">
+                <label for="Members">Members: </label>
+                <input type="text" name="Members">
+                <input type="submit" value="Create">
+            </form>
         </div>
 
         <div>
@@ -45,14 +57,20 @@
                     </div>
                 {% endfor %}
             </div>
+
+            <form action="POST" class="quickreplyform genericForm1">
+                {% csrf_token %}
+                <textarea name="Body" id="Body"></textarea>
+                <input type="submit" value="send">
+            </form>
         </div>
     </div>
 
 
-    <form action="POST" class="hiddenform">
+    <!-- <form action="POST" class="hiddenform">
         {% csrf_token %}
         <input type="hidden" name="blah" value="0">
-    </form>
+    </form> -->
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/home.js' %}"></script>
