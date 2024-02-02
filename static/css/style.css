@@ -18,9 +18,23 @@ body {
 }
 
 
+#mains {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-gap: 1rem;
+}
+
+
+
 .branch_id, .tree_id, .node_id, .hiddenform {
     display: none;
     color: blue;
+}
+
+.itemlist {
+    overflow-y: auto;
+    max-height: 60vh;
+    background-color: rgb(243, 241, 237);
 }
 
 
@@ -35,10 +49,11 @@ body {
     margin: 0;
 }
 
-.nodelist {
-    overflow-y: auto;
-    max-height: 60vh;
-}
+
+
+
+
+
 
 .node {
     

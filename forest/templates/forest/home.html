@@ -5,46 +5,49 @@
 {% block content %}
 <p>{{ msg }}</p>
 
-    <div class="treelist">
-        <h2>my Trees</h2>
-        {% for tree in trees %}
-            <div class="listitem tree">
-                <p>{{ tree.topic }}</p>
-                <p class="tree_id">{{ tree.id }}</p>
+    <div id="mains">
+        <div>
+            <h2>my Trees</h2>
+            <div class="treelist itemlist">
+                {% for tree in trees %}
+                    <div class="listitem tree">
+                        <p>{{ tree.topic }}</p>
+                        <p class="tree_id">{{ tree.id }}</p>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
+
+        <div>
+            <h2>Branches</h2>
+            <div class="branchlist itemlist">
+                {% for branch in branches %}
+                    <div class="listitem branch">
+                        <p>{{ branch.subject }}</p>
+                        <p>{{ branch.members }}</p>
+                        <p class="branch_id">{{ branch.id }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <h2>Messages</h2>
+            <div class="nodelist itemlist">
+                {% for node in nodes %}
+                    <div class="listitem node">
+                        <p>{{ node.sender }}</p>
+                        <p>{{ node.created_on }}</p>
+                        <p>{{ node.content }}</p>
+                        <p>{{ node.base.id }}</p>
+                        <p>{{ node.arrow.id }}</p>
+                        <p class="node_id">{{ node.id }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
-    <hr>
-
-    <h2>Branches</h2>
-    <div class="branchlist">
-        {% for branch in branches %}
-            <div class="listitem branch">
-                <p>{{ branch.subject }}</p>
-                <p>{{ branch.members }}</p>
-                <p class="branch_id">{{ branch.id }}</p>
-            </div>
-        {% endfor %}
-    </div>
-
-    <hr>
-
-    <h2>Messages</h2>
-    <div class="nodelist">
-        {% for node in nodes %}
-            <div class="listitem node">
-                <p>{{ node.sender }}</p>
-                <p>{{ node.created_on }}</p>
-                <p>{{ node.content }}</p>
-                <p>{{ node.base.id }}</p>
-                <p>{{ node.arrow.id }}</p>
-                <p class="node_id">{{ node.id }}</p>
-            </div>
-        {% endfor %}
-    </div>
-
-    
 
     <form action="POST" class="hiddenform">
         {% csrf_token %}
