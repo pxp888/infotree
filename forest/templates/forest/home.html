@@ -15,11 +15,18 @@
             <div class="treelist itemlist">
                 {% for tree in trees %}
                     <div class="listitem tree">
-                        <p>{{ tree.topic }}</p>
+                        <p class="tree_topic">{{ tree.topic }}</p>
                         <p class="tree_id">{{ tree.id }}</p>
                     </div>
                 {% endfor %}
             </div>
+
+            <form action="POST" class="treeform genericForm2">
+                {% csrf_token %}
+                <label for="Topic">Topic: </label>
+                <input type="text" name="Topic" id="tree_topic_input">
+                <input type="submit" value="Create">
+            </form>
         </div>
 
         <div>
@@ -33,12 +40,12 @@
                     </div>
                 {% endfor %}
             </div>
-            <form action="POST" class="branchform genericForm1">
+            <form action="POST" class="branchform genericForm2">
                 {% csrf_token %}
                 <label for="Subject">Subject: </label>
-                <input type="text" name="Subject">
+                <input type="text" name="Subject" id="branch_subject_input">
                 <label for="Members">Members: </label>
-                <input type="text" name="Members">
+                <input type="text" name="Members" id="branch_members_input">
                 <input type="submit" value="Create">
             </form>
         </div>
@@ -58,9 +65,9 @@
                 {% endfor %}
             </div>
 
-            <form action="POST" class="quickreplyform genericForm1">
+            <form action="POST" class="quickreplyform genericForm2">
                 {% csrf_token %}
-                <textarea name="Body" id="Body"></textarea>
+                <textarea name="Body" id="Body" placeholder="type your message here ..."></textarea>
                 <input type="submit" value="send">
             </form>
         </div>

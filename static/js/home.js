@@ -10,6 +10,11 @@ function treeClicked(event) {
     }
     let tree_id = target.querySelector('.tree_id').innerHTML;
 
+    $('.tree').removeClass('selected');
+    target.classList.toggle('selected');
+
+    $('#tree_topic_input').val(target.querySelector('.tree_topic').innerHTML);
+
     $.ajax({
         url: '/',
         type: 'POST',
@@ -59,7 +64,13 @@ function branchClicked(event) {
         target = target.parentElement;
     }
     let branch_id = target.querySelector('.branch_id').innerHTML;
-    say(branch_id);
+
+    $('.branch').removeClass('selected');
+    target.classList.toggle('selected');
+
+    $('#branch_subject_input').val(target.querySelector('.branch_subject').innerHTML);
+    $('#branch_members_input').val(target.querySelector('.branch_members').innerHTML);
+
 
     $.ajax({
         url: '/',
@@ -138,6 +149,22 @@ function makeNode(response) {
     $('.nodelist').scrollTop($('.nodelist')[0].scrollHeight);
 }
 
+
+// prevent form submission
+$('.treeform').submit(function(event) {
+    event.preventDefault();
+    say('trees!');
+});
+
+$('.branchform').submit(function(event) {
+    event.preventDefault();
+    say('branchie');
+});
+
+$('.quickreplyform').submit(function(event) {
+    event.preventDefault();
+    say('quickie');
+});
 
 
 

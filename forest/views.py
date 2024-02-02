@@ -11,7 +11,8 @@ funcs = {}
 # Create your views here.
 def homepage(request):
     if not request.user.is_authenticated:
-        return render(request, 'forest/landing.html')
+        # return render(request, 'forest/landing.html')
+        return redirect('/')
     
     if request.method == 'POST':
         ptype = request.POST.get('ptype')
@@ -37,9 +38,6 @@ def homepage(request):
     for tree in myBranches.values():
         myTrees[tree.tree.id] = tree.tree
 
-    # unread = Branch.objects.filter(target__target=request.user, target__read=False)
-    # print(unread)
-
     context = {
         'trees':myTrees.values(), 
         }
@@ -49,7 +47,7 @@ def homepage(request):
 
 def compose(request):
     if not request.user.is_authenticated:
-        return render(request, 'forest/landing.html')
+        return redirect('/')
 
     if request.method == 'POST':
         topic = request.POST.get('Topic')
@@ -94,6 +92,8 @@ def makeTargets(node, branch):
             cache.delete(f'status_{member}')
 
 
+
+'''AJAX functions'''
 
 def get_branches(request):
     tree_id = int(request.POST.get('tree_id'))
