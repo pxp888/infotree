@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock head %}
 
 {% block content %}
     <h1>Hello!  Please log in.</h1>

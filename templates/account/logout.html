@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
+
 {% load i18n %}
+
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/style.css' %}">{% endblock head %}
+
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 

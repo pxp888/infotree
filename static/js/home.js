@@ -272,6 +272,7 @@ function new_branch(event) {
     });
 }
 
+
 function update_branch() {
     const current_branch = $('.branchlist .selected .branch_id').html();
     if (current_branch === undefined || current_branch === ''){
@@ -301,6 +302,8 @@ function update_branch() {
         }
     });
 }
+
+
 
 
 // prevent form submission

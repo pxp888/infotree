@@ -11,8 +11,7 @@ funcs = {}
 # Create your views here.
 def homepage(request):
     if not request.user.is_authenticated:
-        # return render(request, 'forest/landing.html')
-        return redirect('/')
+        return render(request, 'forest/landing.html')
     
     if request.method == 'POST':
         ptype = request.POST.get('ptype')
@@ -209,11 +208,12 @@ def update_branch(request):
             'unread': unread,
         }
         cache.set(f'status_{request.user.username}', response, 60*5)
-        print('cache miss', response)
         return JsonResponse(response)
     else:
-        print('cache hit', status)
         return JsonResponse(status)
+
+
+
 
 
 funcs['get_branches'] = get_branches
