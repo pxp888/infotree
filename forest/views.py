@@ -46,6 +46,7 @@ def makeTargets(node, branch):
     for member in members:
         target = Target(node=node, target=member.user, branch=branch, tree=branch.tree)
         target.save()
+        cache.delete(member.user.username)
 
 
 '''AJAX functions'''
@@ -197,6 +198,7 @@ def get_node(request):
     except Exception as e:
         print(e)
 
+    cache.delete(request.user.username)
     return send_node(node)
 
 
@@ -241,13 +243,18 @@ def update(request):
     user = request.user
     current_branch_id = request.POST.get('current_branch_id')
     
+    response = cache.get(user.username)
+    if response:
+        print('Cache hit')
+        return JsonResponse(response)
+    print('Cache miss')
+
     utargets = {}
     ubranches = {}
     utrees = {}
 
     targets = Target.objects.filter(target=user, read=False)
     for target in targets:
-        
         if int(current_branch_id) == int(target.node.branch.id):
             utargets[target.node.id] = 1
         ubranches[target.node.branch.id] = 1
@@ -259,6 +266,7 @@ def update(request):
         'ubranches': list(ubranches.keys()),
         'utrees': list(utrees.keys()),
     }
+    cache.set(user.username, response, 180)
     return JsonResponse(response)
 
 
