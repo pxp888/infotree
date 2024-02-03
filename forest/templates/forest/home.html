@@ -11,7 +11,7 @@
     <div id="msg_list"></div>
 
     <div id="mains">
-        <div>
+        <div id="tree_section">
             <h2>Trees</h2>
             <div class="treelist itemlist">
                 {% for tree in trees %}
@@ -30,7 +30,7 @@
             </form>
         </div>
 
-        <div>
+        <div id="branch_section">
             <h2>Branches</h2>
             <div class="branchlist itemlist">
                 {% for branch in branches %}
@@ -56,7 +56,7 @@
             </form>
         </div>
 
-        <div>
+        <div id="node_section">
             <h2>Messages</h2>
             <div class="nodelist itemlist">
                 {% for node in nodes %}
