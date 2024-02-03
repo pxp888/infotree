@@ -4,7 +4,11 @@
 <!-- {% load account socialaccount %} -->
 
 {% load static %}
-{% block head %}<link rel="stylesheet" href="{% static 'css/style.css' %}">{% endblock head %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock head %}
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 

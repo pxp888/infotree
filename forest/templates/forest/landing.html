@@ -3,11 +3,14 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
 {% endblock head %}
 
 {% block content %}
-    <h1>Hello!  Please log in.</h1>
-    <p>(This is the landing page.)</p>
+    <div class="hello_block">
+        <h1>Welcome to infoTrees,</h1>
+        <p>the branching messenger</p>
+    </div>
 
 {% endblock %}
 
