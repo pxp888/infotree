@@ -245,9 +245,7 @@ def update(request):
     
     response = cache.get(user.username)
     if response:
-        print('Cache hit')
         return JsonResponse(response)
-    print('Cache miss')
 
     utargets = {}
     ubranches = {}

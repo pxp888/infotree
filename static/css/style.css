@@ -1,6 +1,12 @@
+:root {
+    --user_color: rgb(122 132 145);
+    --list_back_color: rgb(247 243 236);
+    --list_back_color: rgb(243, 241, 237);
+}
+
 body {
     font-family: Roboto, sans-serif;
-    /* background-color: rgb(243, 241, 237); */
+    background-color: rgb(247 243 236);
 }
 
 
@@ -40,8 +46,8 @@ body {
     margin: 1rem;
 }
 
-.branch_id, .tree_id, .node_id, .hiddenform, .hidden {
-    /* display: none; */
+.hiddenform, .hidden {
+    display: none;
     color: blue;
     grid-column-start: 1;
     grid-column-end: 3;
@@ -51,11 +57,10 @@ body {
 .itemlist {
     overflow-y: auto;
     height: 60vh;
-    background-color: rgb(243, 241, 237);
+    background-color: var(--list-back-color);
     border: 1px solid rgb(190, 190, 190);
     margin: .5rem;
 }
-
 
 .listitem {
     background-color: white;
@@ -93,27 +98,36 @@ body {
 .node .node_created_on {
     text-align: right;
     font-size: 12px;
+    color: var(--user_color);
 }
 
-.node .content {
+p.node_content {
     grid-column-start: 1;
     grid-column-end: 3;
+    margin: .5rem 1rem;
+    
 }
 
 .node .node_sender {
     font-weight: bold;
     font-size: 12px;
+    color: var(--user_color);
 }
 
 .node .node_id {
     grid-column-end: 3;
 }
 
-
 .branch {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
+.branch_members {
+    grid-column-start: 1;
+    grid-column-end: 3;
+
+    font-size: 14px;
+    color: var(--user_color);
+}
 
