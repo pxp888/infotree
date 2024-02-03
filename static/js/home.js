@@ -76,14 +76,17 @@ function sort_trees(){
 function make_tree(data){
     const treelist = $('.treelist').first();
     let tree = document.createElement('div');
-    let tree_topic = document.createElement('p');
-    let tree_id = document.createElement('p');
     tree.classList.add('tree');
     tree.classList.add('listitem');
+
+    let tree_topic = document.createElement('p');
+    tree_topic.innerHTML = data.topic;
+    
+    let tree_id = document.createElement('p');
     tree_id.classList.add('tree_id');
     tree_id.classList.add('hidden');
-    tree_topic.innerHTML = data.topic;
     tree_id.innerHTML = data.tree_id;
+    
     tree.appendChild(tree_id);
     tree.appendChild(tree_topic);
     treelist.append(tree);
@@ -129,7 +132,9 @@ function add_branch() {
         'subject': branch_subject,
     }
     ajaxPost(data, function (response){
-        make_branch(response);
+        new_branch = make_branch(response);
+        $('.branch').removeClass('selected');
+        new_branch.classList.add('selected');
     });
     $('#branch_subject_input').val('');
 }
@@ -164,20 +169,25 @@ function get_branch(branch_id) {
 function make_branch(data){
     const branchlist = $('.branchlist').first();
     let branch = document.createElement('div');
-    let branch_subject = document.createElement('p');
-    let branch_id = document.createElement('p');
-    let branch_members = document.createElement('p');
     branch.classList.add('branch');
     branch.classList.add('listitem');
+    
+    let branch_subject = document.createElement('p');
+    branch_subject.innerHTML = data.subject;
+
+    let branch_id = document.createElement('p');
     branch_id.classList.add('branch_id');
     branch_id.classList.add('hidden');
-    branch_members.classList.add('branch_members');
-    branch_subject.innerHTML = data.subject;
     branch_id.innerHTML = data.branch_id;
+    
+    let branch_members = document.createElement('p');
+    branch_members.classList.add('branch_members');
     branch_members.innerHTML = data.members;
+    
     branch.appendChild(branch_id);
     branch.appendChild(branch_subject);
     branch.appendChild(branch_members);
+    
     branchlist.append(branch);
     branch.addEventListener('click', branch_clicked);
     sort_branches();
@@ -265,22 +275,28 @@ function add_node(){
 
 function make_node(data){
     const nodelist = $('.nodelist').first();
+    
     let node = document.createElement('div');
-    let node_content = document.createElement('p');
-    let node_id = document.createElement('p');
-    let node_sender = document.createElement('p');
-    let node_created_on = document.createElement('p');
     node.classList.add('node');
     node.classList.add('listitem');
+    
+    let node_content = document.createElement('p');
+    node_content.classList.add('node_content');
+    node_content.innerHTML = data.content;
+    
+    let node_id = document.createElement('p');
     node_id.classList.add('node_id');
     node_id.classList.add('hidden');
-    node_content.classList.add('node_content');
-    node_sender.classList.add('node_sender');
-    node_created_on.classList.add('node_created_on');
-    node_content.innerHTML = data.content;
     node_id.innerHTML = data.node_id;
+    
+    let node_sender = document.createElement('p');
+    node_sender.classList.add('node_sender');
     node_sender.innerHTML = data.sender;
+    
+    let node_created_on = document.createElement('p');
+    node_created_on.classList.add('node_created_on');
     node_created_on.innerHTML = data.created_on;
+    
     node.appendChild(node_id);
     node.appendChild(node_sender);
     node.appendChild(node_created_on);
@@ -335,6 +351,18 @@ function add_member(){
 }
 
 
+function update(){
+    data = {
+        'ptype': 'update',
+    }
+    ajaxPost(data, function (response){
+        say(response);
+    });
+}
+
+
+
+
 // prevent form submission
 $('#treeform').submit(function(event) {
     event.preventDefault();
@@ -354,18 +382,14 @@ $('#memberform').submit(function(event) {
 
 
 
-
-
 // Event Listeners
 $('#add_tree_send').click(add_tree);
 $('#add_branch_send').click(add_branch);
 $('#quickreply_send').click(add_node);
 $('#memberform_send').click(add_member);
-// $('#branchform_send').click(new_branch);
-// $('.tree').click(treeClicked);
-// $('.branch').click(branchClicked);
-
-// setInterval(update_branch, 2000);
 
 
 get_trees();
+
+setInterval(update, 3000);
+

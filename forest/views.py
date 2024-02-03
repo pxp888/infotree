@@ -227,6 +227,15 @@ def add_member(request):
     return send_branch(branch)
 
 
+def update(request):
+    user = request.user
+    targets = Target.objects.filter(target=user, read=False)
+
+    response = {
+        'ptype': 'update',
+    }
+    return JsonResponse(response)
+
 
 funcs['add_tree'] = add_tree
 funcs['get_trees'] = get_trees
@@ -238,8 +247,6 @@ funcs['get_nodes'] = get_nodes
 funcs['add_node'] = add_node
 funcs['get_node'] = get_node
 funcs['add_member'] = add_member
-
-
-
+funcs['update'] = update
 
 
