@@ -1,0 +1,39 @@
+#top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+#top .logo {
+    text-decoration: none;
+    font-size: 2em;
+    font-weight: bold;
+    color: black;
+}
+
+#top div {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+#top .top_username {
+    margin: 12px 0;
+}
+
+#top ul {
+    list-style-type: none;
+    margin: 12px 0;
+}
+
+#top li {
+    display: inline;
+}
+
+#top a {
+    text-decoration: none;
+    color: black;
+    margin: 0 10px;
+}
+

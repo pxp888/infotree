@@ -38,12 +38,12 @@ body {
 
 
 
-
-.branch_id, .tree_id, .node_id, .hiddenform {
-    /* display: none; */
+.branch_id, .tree_id, .node_id, .hiddenform, .hidden {
+    display: none;
     color: blue;
+    grid-column-start: 1;
+    grid-column-end: 3;
 }
-
 
 
 .itemlist {

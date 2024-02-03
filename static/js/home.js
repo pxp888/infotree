@@ -3,313 +3,341 @@ const say = (...msgs) => console.log(...msgs);
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 const username = $('.username').html();
 
+// helper function for ajax get requests
+function ajaxPost(data, successfunc) {
+    $.ajax({
+        type: 'POST',
+        url: '/',
+        data: data,
+        headers: { 'X-CSRFToken': csrfToken, },
+        success: successfunc,
+        error: function(response) {
+            say('Error:', response);
+        },
+    });
+}
 
-function treeClicked(event) {
-    target = event.target;
-    if (target.tagName === 'P') {
+
+function add_tree(){
+    const tree_topic = $('#tree_topic_input').val();
+    $('#tree_topic_input').val('');
+
+    if(tree_topic === ''){
+        alert('Please enter a topic');
+        return;
+    }
+    data = {
+        'ptype': 'add_tree',
+        'topic': tree_topic,
+    }
+    ajaxPost(data, function (response){
+        say(response);
+        make_tree(response);
+    });
+}
+
+
+function get_trees(){
+    data = {
+        'ptype': 'get_trees',
+    }
+    ajaxPost(data, function (response){
+        trees = response.trees;
+        for (let i = 0; i < trees.length; i++){
+            get_tree(trees[i]);
+        }
+    });
+}
+
+
+function get_tree(tree_id){
+    data = {
+        'ptype': 'get_tree',
+        'tree_id': tree_id,
+    }
+    ajaxPost(data, function (response){
+        make_tree(response);
+    });
+}
+
+
+function sort_trees(){
+    const treelist = $('.treelist').first();
+    let trees = treelist.children();
+    trees.sort(function(a, b){
+        let a_id = a.querySelector('.tree_id').innerHTML;
+        let b_id = b.querySelector('.tree_id').innerHTML;
+        return a_id - b_id;
+    });
+    treelist.append(trees);
+}
+
+
+function make_tree(data){
+    const treelist = $('.treelist').first();
+    let tree = document.createElement('div');
+    let tree_topic = document.createElement('p');
+    let tree_id = document.createElement('p');
+    tree.classList.add('tree');
+    tree.classList.add('listitem');
+    tree_id.classList.add('tree_id');
+    tree_id.classList.add('hidden');
+    tree_topic.innerHTML = data.topic;
+    tree_id.innerHTML = data.tree_id;
+    tree.appendChild(tree_id);
+    tree.appendChild(tree_topic);
+    treelist.append(tree);
+    tree.addEventListener('click', tree_clicked);
+    sort_trees();
+}
+
+
+function tree_clicked(event){
+    let target = event.target;
+    if(target.tagName === 'P'){
         target = target.parentElement;
     }
     let tree_id = target.querySelector('.tree_id').innerHTML;
 
-    $('.tree').removeClass('selected');
-    target.classList.toggle('selected');
-
-    $('#tree_topic_input').val(target.querySelector('.tree_topic').innerHTML);
-
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'get_branches',
-            'tree_id': tree_id,
-        },
-        success: function(response) {
-            makeBranches(response);
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
-}
-
-
-function get_trees() {
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'get_trees',
-        },
-        success: function(response) {
-            say(response);
-            // makeTrees(response);
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
-}
-
-
-function makeBranches(response) {
-    $('.branchlist').empty();
-    $('.nodelist').empty();
-    for (let i = 0; i < response.id_list.length; i++) {
-        let branch = document.createElement('div');
-        let branch_id = document.createElement('p');
-        let branch_subject = document.createElement('p');
-        let branch_members = document.createElement('p');
-        branch.className = 'branch';
-        branch.classList.add('listitem');
-        branch_id.className = 'branch_id';
-        branch_subject.className = 'branch_subject';
-        branch_members.className = 'branch_members';
-        branch_id.innerHTML = response.id_list[i];
-        branch_subject.innerHTML = response.subject_list[i];
-        branch_members.innerHTML = response.member_list[i];
-        branch.appendChild(branch_id);
-        branch.appendChild(branch_subject);
-        branch.appendChild(branch_members);
-        $('.branchlist').append(branch);
-        branch.addEventListener('click', branchClicked);
+    let trees = $('.tree');
+    for (let i = 0; i < trees.length; i++){
+        trees[i].classList.remove('selected');
     }
+    target.classList.add('selected');
+    const branchlist = $('.branchlist.itemlist');
+    branchlist.empty();
+    const nodelist = $('.nodelist.itemlist');
+    nodelist.empty();
+    get_branches(tree_id);
 }
 
 
-function branchClicked(event) {
-    target = event.target;
-    if (target.tagName === 'P') {
+function add_branch() {
+    const branch_subject = $('#branch_subject_input').val();
+    const tree_id = $('.selected .tree_id').html();
+    if (tree_id === undefined){
+        alert('Please select a tree');
+        return;
+    }
+    if(branch_subject === ''){
+        alert('Please enter a subject');
+        return;
+    }
+    data = {
+        'ptype': 'add_branch',
+        'tree_id': tree_id,
+        'subject': branch_subject,
+    }
+    ajaxPost(data, function (response){
+        make_branch(response);
+    });
+    $('#branch_subject_input').val('');
+}
+
+
+function get_branches(tree_id) {
+    data = {
+        'ptype': 'get_branches',
+        'tree_id': tree_id,
+    };
+    ajaxPost(data, function (response){
+        branches = response.branches;
+        for (let i = 0; i < branches.length; i++){
+            get_branch(branches[i]);
+        }
+    });
+    
+}
+
+
+function get_branch(branch_id) {
+    data = {
+        'ptype': 'get_branch',
+        'branch_id': branch_id,
+    }
+    ajaxPost(data, function (response){
+        make_branch(response);
+    });
+}
+
+
+function make_branch(data){
+    const branchlist = $('.branchlist').first();
+    let branch = document.createElement('div');
+    let branch_subject = document.createElement('p');
+    let branch_id = document.createElement('p');
+    let branch_members = document.createElement('p');
+    branch.classList.add('branch');
+    branch.classList.add('listitem');
+    branch_id.classList.add('branch_id');
+    branch_id.classList.add('hidden');
+    branch_members.classList.add('branch_members');
+    branch_subject.innerHTML = data.subject;
+    branch_id.innerHTML = data.branch_id;
+    branch_members.innerHTML = data.members;
+    branch.appendChild(branch_id);
+    branch.appendChild(branch_subject);
+    branch.appendChild(branch_members);
+    branchlist.append(branch);
+    branch.addEventListener('click', branch_clicked);
+    sort_branches();
+    return branch;
+}
+
+
+function sort_branches(){
+    const branchlist = $('.branchlist').first();
+    let branches = branchlist.children();
+    branches.sort(function(a, b){
+        let a_id = a.querySelector('.branch_id').innerHTML;
+        let b_id = b.querySelector('.branch_id').innerHTML;
+        return a_id - b_id;
+    });
+    branchlist.append(branches);
+}
+
+
+function branch_clicked(event){
+    let target = event.target;
+    if(target.tagName === 'P'){
         target = target.parentElement;
     }
     let branch_id = target.querySelector('.branch_id').innerHTML;
 
-    $('.branch').removeClass('selected');
-    target.classList.toggle('selected');
-
-    $('#branch_subject_input').val(target.querySelector('.branch_subject').innerHTML);
-    $('#branch_members_input').val(target.querySelector('.branch_members').innerHTML);
-
-
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'get_nodes',
-            'branch_id': branch_id,
-        },
-        success: function(response) {
-            getNodes(response);
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
-}
-
-
-function getNodes(response) {
-    $('.nodelist').empty();
-    for (let i = 0; i < response.id_list.length; i++) {
-        getNode(response.id_list[i]);
+    let branches = $('.branch');
+    for (let i = 0; i < branches.length; i++){
+        branches[i].classList.remove('selected');
     }
+    target.classList.add('selected');
+    const nodelist = $('.nodelist.itemlist');
+    nodelist.empty();
+    get_nodes(branch_id);
 }
 
 
-function getNode(id) {
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'get_node',
-            'node_id': id,
-        },
-        success: function(response) {
-            makeNode(response);
-        },
-        error: function(error) {
-            console.error(error);
+function get_nodes(branch_id){
+    data = {
+        'ptype': 'get_nodes',
+        'branch_id': branch_id,
+    }
+    ajaxPost(data, function (response){
+        nodes = response.nodes;
+        for (let i = 0; i < nodes.length; i++){
+            get_node(nodes[i]);
         }
     });
 }
 
 
-function makeNode(response) {
+function get_node(node_id){
+    data = {
+        'ptype': 'get_node',
+        'node_id': node_id,
+    }
+    ajaxPost(data, function (response){
+        make_node(response);
+    });
+}
+
+
+function add_node(){
+    const branch_id = $('.selected .branch_id').html();
+    if (branch_id === undefined){
+        alert('Please select a branch');
+        return;
+    }
+    const node_text = $('#quickreply_body').val();
+    if(node_text === ''){
+        alert('Please enter a message');
+        return;
+    }
+    data = {
+        'ptype': 'add_node',
+        'branch_id': branch_id,
+        'content': node_text,
+    }
+    ajaxPost(data, function (response){
+        make_node(response);
+    });
+    $('#quickreply_body').val('');
+}
+
+
+function make_node(data){
+    const nodelist = $('.nodelist').first();
     let node = document.createElement('div');
+    let node_content = document.createElement('p');
     let node_id = document.createElement('p');
     let node_sender = document.createElement('p');
     let node_created_on = document.createElement('p');
-    let node_content = document.createElement('p');
-    node.className = 'node';
+    node.classList.add('node');
     node.classList.add('listitem');
-    node_id.className = 'node_id';
-    node_sender.className = 'node_sender';
-    node_created_on.className = 'node_created_on';
-    node_content.className = 'node_content';
-    node_id.innerHTML = response.node_id;
-    node_sender.innerHTML = response.sender;
-    node_created_on.innerHTML = response.created_on;
-    node_content.innerHTML = response.content;
+    node_id.classList.add('node_id');
+    node_id.classList.add('hidden');
+    node_content.classList.add('node_content');
+    node_sender.classList.add('node_sender');
+    node_created_on.classList.add('node_created_on');
+    node_content.innerHTML = data.content;
+    node_id.innerHTML = data.node_id;
+    node_sender.innerHTML = data.sender;
+    node_created_on.innerHTML = data.created_on;
     node.appendChild(node_id);
     node.appendChild(node_sender);
     node.appendChild(node_created_on);
     node.appendChild(node_content);
-
-    if (node_sender.innerHTML === username) {
+    const username = $('.top_username').html();
+    if (username === data.sender){
         node.classList.add('sentmessage');
     }
 
-    $('.nodelist').append(node);
-    sortNodes();
+    nodelist.append(node);
+    sort_nodes();
 }
 
-
-function sortNodes() {
-    nodes = $('.nodelist .node');
-    let nodes_array = [];
-    for (let i = 0; i < nodes.length; i++) {
-        nodes_array.push(nodes[i]);
-    }
-    nodes_array.sort((a, b) => {
-        return parseInt(a.querySelector('.node_id').innerHTML) - parseInt(b.querySelector('.node_id').innerHTML);
+function sort_nodes(){
+    const nodelist = $('.nodelist').first();
+    let nodes = nodelist.children();
+    nodes.sort(function(a, b){
+        let a_id = a.querySelector('.node_id').innerHTML;
+        let b_id = b.querySelector('.node_id').innerHTML;
+        return a_id - b_id;
     });
-    $('.nodelist').empty();
-    for (let i = 0; i < nodes_array.length; i++) {
-        $('.nodelist').append(nodes_array[i]);
-    }
-    $('.nodelist').scrollTop($('.nodelist').prop('scrollHeight'));
+    nodelist.append(nodes);
 }
 
 
-function quickreply(event) {
-    let branch_id = $('.branchlist .selected .branch_id').html();
-    let content = $('#quickreply_body').val();
-    if (branch_id === undefined || branch_id === ''){
+function add_member(){
+    const branch_id = $('.selected .branch_id').html();
+
+    if (branch_id === undefined){
         alert('Please select a branch');
         return;
     }
+    const member_username = $('#member_input').val();
+    if(member_username === ''){
+        alert('Please enter a username');
+        return;
+    }
+
     
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'quick_reply',
-            'branch_id': branch_id,
-            'content': content,
-        },
-        success: function(response) {
-            say(response);
-            if (response.status === 'unread_node') {
-                getNode(response.node_id);
-                $('#quickreply_body').val('');
-            }
-        },
-        error: function(error) {
-            console.error(error);
-        }
+    
+
+    data = {
+        'ptype': 'add_member',
+        'branch_id': branch_id,
+        'username': member_username,
+    }
+    ajaxPost(data, function (response){
+        const thing = $('.selected .branch_members')[0];
+        thing.innerHTML = response.members;
     });
+    $('#member_input').val('');
 }
-
-
-function new_branch(event) {
-    const tree_id = $('.tree.selected .tree_id').html();
-    const subject = $('#branch_subject_input').val();
-    const members = $('#branch_members_input').val();
-    if (tree_id === undefined || tree_id === ''){
-        alert('Please select a tree');
-        return;
-    }
-    if (subject === undefined || subject === ''){
-        alert('Please enter a subject');
-        return;
-    }
-    if (members === undefined || members === ''){
-        alert('Please enter members');
-        return;
-    }
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'new_branch',
-            'tree_id': tree_id,
-            'subject': subject,
-            'members': members,
-        },
-        success: function(response) {
-            say(response);
-            if (response.status === 'new_branch') {
-                $('.tree.selected').click();
-                let branches = $('.branchlist .branch');
-                for (let i = 0; i < branches.length; i++) {
-                    if (branches[i].querySelector('.branch_id').innerHTML === response.branch_id) {
-                        branches[i].click();
-                        break;
-                    }
-                }
-            }
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
-}
-
-
-function update_branch() {
-    const current_branch = $('.branchlist .selected .branch_id').html();
-    if (current_branch === undefined || current_branch === ''){
-        return;
-    }
-
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        data: {
-            'ptype': 'update_branch',
-            'branch_id': current_branch,
-        },
-        success: function(response) {
-            if (response.branch_id === parseFloat(current_branch)) {
-                const unread = response.unread;
-                for (let i = 0; i < unread.length; i++) {
-                    getNode(unread[i]);
-                }
-            }
-        },
-        error: function(error) {
-            console.error(error);
-        }
-    });
-}
-
-
 
 
 // prevent form submission
 $('#treeform').submit(function(event) {
     event.preventDefault();
-    say('trees!');
 });
 
 $('#branchform').submit(function(event) {
@@ -320,10 +348,24 @@ $('#quickreplyform').submit(function(event) {
     event.preventDefault();
 });
 
+$('#memberform').submit(function(event) {
+    event.preventDefault();
+});
 
-$('#quickreply_send').click(quickreply);
-$('#branchform_send').click(new_branch);
-$('.tree').click(treeClicked);
-$('.branch').click(branchClicked);
 
-setInterval(update_branch, 2000);
+
+
+
+// Event Listeners
+$('#add_tree_send').click(add_tree);
+$('#add_branch_send').click(add_branch);
+$('#quickreply_send').click(add_node);
+$('#memberform_send').click(add_member);
+// $('#branchform_send').click(new_branch);
+// $('.tree').click(treeClicked);
+// $('.branch').click(branchClicked);
+
+// setInterval(update_branch, 2000);
+
+
+get_trees();

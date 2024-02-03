@@ -3,16 +3,15 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.core.cache import cache
 
-from .models import Tree, Branch, Node, Target
+from .models import Tree, Branch, Node, Target, Member
 
 funcs = {}
-
 
 # Create your views here.
 def homepage(request):
     if not request.user.is_authenticated:
         return render(request, 'forest/landing.html')
-    
+
     if request.method == 'POST':
         ptype = request.POST.get('ptype')
         try:
@@ -23,49 +22,11 @@ def homepage(request):
             }
             return JsonResponse(response)
 
-    myTrees = {}
-    myBranches = {}
-    
-    inbox = Target.objects.filter(target=request.user)
-    for target in inbox:
-        myBranches[target.branch.id] = Branch.objects.get(id=target.branch.id)
-    
-    outbox = Node.objects.filter(sender=request.user)
-    for node in outbox:
-        myBranches[node.branch.id] = Branch.objects.get(id=node.branch.id)
-    
-    for tree in myBranches.values():
-        myTrees[tree.tree.id] = tree.tree
-
     context = {
-        'trees':myTrees.values(), 
-        }
+        
+    }
 
     return render(request, 'forest/home.html', context)
-
-
-def compose(request):
-    if not request.user.is_authenticated:
-        return redirect('/')
-
-    if request.method == 'POST':
-        topic = request.POST.get('Topic')
-        recipients = request.POST.get('Recipients')
-        subject = request.POST.get('Subject')
-        body = request.POST.get('Body')
-
-        tree = Tree(topic=topic, author=request.user)
-        branch = Branch(tree=tree, subject=subject, members=recipients + ', ' + request.user.username)
-        node = Node(branch=branch, sender=request.user, content=body)
-        tree.save()
-        branch.save()
-        node.save()
-        makeTargets(node, branch)
-
-        return render(request, 'forest/compose.html', {'msg': 'Message sent successfully.'})
-
-    else:
-        return render(request, 'forest/compose.html')
 
 
 '''Helper functions'''
@@ -79,146 +40,206 @@ def getUser(username):
 
 
 def makeTargets(node, branch):
-    members = branch.members.split(',')
-    members = [member.strip() for member in members]
-    members.remove(node.sender.username)
+    members = Member.objects.filter(branch=branch)
+    members = members.exclude(user=node.sender)
 
     for member in members:
-        target = getUser(member)
-        if target is not None:
-            target = Target(node=node, target=target, branch=branch)
-            target.save()
-            cache.delete(f'status_{member}')
-
+        target = Target(node=node, target=member.user, branch=branch, tree=branch.tree)
+        target.save()
 
 
 '''AJAX functions'''
 
+def send_tree(tree):
+    response = {
+        'ptype': 'send_tree',
+        'tree_id': tree.id,
+        'topic': tree.topic,
+        'author': tree.author.username,
+        'created_on': tree.created_on.strftime('%b %d, %Y, %I:%M %p'),
+    }
+    return JsonResponse(response)
+
+
+def add_tree(request):
+    topic = request.POST.get('topic')
+    author = request.user
+    tree = Tree(topic=topic, author=author)
+    tree.save()
+    return send_tree(tree)
+
+
+def get_tree(request):
+    tree_id = request.POST.get('tree_id')
+    try:
+        tree = Tree.objects.get(id=tree_id)
+    except Tree.DoesNotExist:
+        response = {
+            'error':'Tree DoesNotExist',
+        }
+        return JsonResponse(response)
+
+    return send_tree(tree)
+
+
+def get_trees(request):
+    user = request.user
+    myTrees = {}
+
+    trees = Tree.objects.filter(author=user)
+    for tree in trees:
+        myTrees[tree.id] = tree
+
+    branches = Member.objects.filter(user=user)
+    for branch in branches:
+        myTrees[branch.tree.id] = branch.tree
+
+    response = {
+        'trees': list(myTrees.keys()),
+    }
+    return JsonResponse(response)
+
+
+def send_branch(branch):
+    try:
+        member_objects = Member.objects.filter(branch=branch)
+    except Exception as e:
+        print(e)
+        member_objects = []
+    
+    members = ''
+    for member in member_objects:
+        members += member.user.username + ', '
+    members = members[:-2]
+
+    response = {
+        'ptype': 'send_branch',
+        'tree_id': branch.tree.id,
+        'branch_id': branch.id,
+        'subject': branch.subject,
+        'created_on': branch.created_on.strftime('%b %d, %Y, %I:%M %p'),
+        'members': members,
+    }
+    return JsonResponse(response)
+
+
+def add_branch(request):
+    user = request.user
+    tree_id = request.POST.get('tree_id')
+    subject = request.POST.get('subject')
+
+    tree = Tree.objects.get(id=tree_id)
+    branch = Branch(tree=tree, subject=subject)
+    branch.save()
+
+    member = Member(tree=tree, branch=branch, user=user)
+    member.save()
+
+    return send_branch(branch)
+
 
 def get_branches(request):
-    tree_id = int(request.POST.get('tree_id'))
-    tree = Tree.objects.get(id=tree_id)
-    branches = Branch.objects.filter(tree=tree)
-    id_list = []
-    subject_list = []
-    member_list = []
-    for branch in branches:
-        id_list.append(branch.id)
-        subject_list.append(branch.subject)
-        member_list.append(branch.members)
+    tree_id = request.POST.get('tree_id')
+
+    branch_objects = Branch.objects.filter(tree=tree_id)
+    branch_ids = []
+    for branch in branch_objects:
+        branch_ids.append(branch.id)
 
     response = {
-        'id_list': id_list,
-        'subject_list': subject_list,
-        'member_list': member_list,
+        'branches': branch_ids,
     }
     return JsonResponse(response)
 
 
-def get_nodes(request):
-    branch_id = int(request.POST.get('branch_id'))
+def get_branch(request):
+    branch_id = request.POST.get('branch_id')
     branch = Branch.objects.get(id=branch_id)
-    nodes = Node.objects.filter(branch=branch)
-    id_list = []
-    for node in nodes:
-        id_list.append(node.id)
 
+    return send_branch(branch)
+
+
+def send_node(node):
     response = {
-        'id_list': id_list,
+        'ptype': 'send_node',
+        'node_id': node.id,
+        'sender': node.sender.username,
+        'content': node.content,
+        'created_on': node.created_on.strftime('%b %d, %Y, %I:%M %p'),
     }
     return JsonResponse(response)
+
+
+def add_node(request):
+    user = request.user
+    branch_id = request.POST.get('branch_id')
+    content = request.POST.get('content')
+
+    branch = Branch.objects.get(id=branch_id)
+    node = Node(sender=user, branch=branch, content=content, tree=branch.tree)
+    node.save()
+
+    makeTargets(node, branch)
+
+    return send_node(node)
 
 
 def get_node(request):
-    node_id = int(request.POST.get('node_id'))
+    node_id = request.POST.get('node_id')
     node = Node.objects.get(id=node_id)
-    try:
-        target = Target.objects.get(node=node, target=request.user)
-        target.read = True
-        target.save()
-        cache.delete(f'status_{request.user.username}')
-    except Target.DoesNotExist:
-        pass
+    return send_node(node)
+
+
+def get_nodes(request):
+    branch_id = request.POST.get('branch_id')
+    nodes = Node.objects.filter(branch=branch_id)
+    node_ids = []
+    for node in nodes:
+        node_ids.append(node.id)
+
     response = {
-        'content': node.content,
-        'sender': node.sender.username,
-        'created_on': node.created_on,
-        'node_id': node.id,
+        'nodes': node_ids,
     }
     return JsonResponse(response)
 
 
-def quick_reply(request):
-    branch_id = int(request.POST.get('branch_id'))
-    content = request.POST.get('content')
+def add_member(request):
+    branch_id = request.POST.get('branch_id')
+    username = request.POST.get('username')
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        response = {
+            'error':'User DoesNotExist',
+        }
+        return JsonResponse(response)
     
     branch = Branch.objects.get(id=branch_id)
-    node = Node(branch=branch, sender=request.user, content=content)
-    node.save()
-    makeTargets(node, branch)
 
-    response = {
-        'status': 'unread_node',
-        'branch_id': branch.id,
-        'node_id': node.id,
-    }
-    return JsonResponse(response)
+    try:
+        old_member = Member.objects.get(branch=branch, user=user)
+        print('Member already exists')
+    except Member.DoesNotExist:    
+        member = Member(tree=branch.tree, branch=branch, user=user)
+        member.save()
 
-
-def new_branch(request):
-    tree_id = int(request.POST.get('tree_id'))
-    subject = request.POST.get('subject')
-    members = request.POST.get('members')
-
-    users = members.split(',')
-    for user in users:
-        user = user.strip()
-        if getUser(user) is None:
-            response = {
-                'status': 'user_not_found',
-                'username': user,
-            }
-            return JsonResponse(response)
-
-    tree = Tree.objects.get(id=tree_id)
-    branch = Branch(tree=tree, subject=subject, members=members)
-    branch.save()
-
-    response = {
-        'status': 'new_branch',
-        'branch_id': branch.id,
-    }
-    return JsonResponse(response)
-
-
-def update_branch(request):
-    user = request.user
-    branch_id = int(request.POST.get('branch_id'))
-    unread = []
-    
-    status = cache.get(f'status_{request.user.username}')
-    if status is None:
-        branch = Branch.objects.get(id=branch_id)
-        targets = Target.objects.filter(target=user, branch=branch, read=False)
-        for target in targets:
-            unread.append(target.node.id)
-
-        response = {
-            'branch_id': branch.id,
-            'unread': unread,
-        }
-        cache.set(f'status_{request.user.username}', response, 60*5)
-        return JsonResponse(response)
-    else:
-        return JsonResponse(status)
+    return send_branch(branch)
 
 
 
-
-
+funcs['add_tree'] = add_tree
+funcs['get_trees'] = get_trees
+funcs['get_tree'] = get_tree
+funcs['add_branch'] = add_branch
 funcs['get_branches'] = get_branches
+funcs['get_branch'] = get_branch
 funcs['get_nodes'] = get_nodes
+funcs['add_node'] = add_node
 funcs['get_node'] = get_node
-funcs['quick_reply'] = quick_reply
-funcs['new_branch'] = new_branch
-funcs['update_branch'] = update_branch
+funcs['add_member'] = add_member
+
+
+
+
+
