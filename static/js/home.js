@@ -358,7 +358,9 @@ function update(){
     }
     ajaxPost(data, function (response){
         utargets = response.utargets;
-        say(utargets);
+        for (let i = 0; i < utargets.length; i++){
+            get_node(utargets[i]);
+        }
     });
 }
 
