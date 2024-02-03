@@ -1,7 +1,8 @@
 :root {
     --user_color: rgb(122 132 145);
-    --list_back_color: rgb(247 243 236);
-    --list_back_color: rgb(243, 241, 237);
+    /* --list_back_color: rgb(247 243 236); */
+    /* --list_back_color: rgb(243, 241, 237); */
+    --list_back_color: rgb(255 248 236);
 }
 
 body {
@@ -17,11 +18,7 @@ body {
     align-items: baseline;
 }
 
-.genericForm1 textarea {
-    grid-column-start: 1;
-    grid-column-end: 3;
-    min-height: 100px;
-}
+
 
 .genericForm1 label {
     grid-column-start: 1;
@@ -35,7 +32,11 @@ body {
     margin: .5rem;
 }
 
-
+.genericForm2 textarea {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    min-height: 5.3rem;
+}
 
 #mains {
     display: grid;
@@ -57,7 +58,7 @@ body {
 .itemlist {
     overflow-y: auto;
     height: 60vh;
-    background-color: var(--list-back-color);
+    background-color: var(--list_back_color);
     border: 1px solid rgb(190, 190, 190);
     margin: .5rem;
 }
