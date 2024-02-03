@@ -352,6 +352,9 @@ function add_member(){
 
 function update(){
     const current_branch_id = parseInt($('.selected .branch_id').html());
+    if (isNaN(current_branch_id)){
+        return;
+    }
     data = {
         'ptype': 'update',
         'current_branch_id': current_branch_id,
@@ -393,5 +396,5 @@ $('#memberform_send').click(add_member);
 
 get_trees();
 
-setInterval(update, 3000);
+setInterval(update, 1000);
 
