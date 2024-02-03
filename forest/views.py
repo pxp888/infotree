@@ -166,6 +166,7 @@ def send_node(node):
         'sender': node.sender.username,
         'content': node.content,
         'created_on': node.created_on.strftime('%b %d, %Y, %I:%M %p'),
+        'branch_id': node.branch.id,
     }
     return JsonResponse(response)
 
@@ -180,13 +181,22 @@ def add_node(request):
     node.save()
 
     makeTargets(node, branch)
-
     return send_node(node)
 
 
 def get_node(request):
     node_id = request.POST.get('node_id')
     node = Node.objects.get(id=node_id)
+
+    try:
+        target = Target.objects.get(node=node, target=request.user, read=False)
+        target.read = True
+        target.save()
+    except Target.DoesNotExist:
+        pass 
+    except Exception as e:
+        print(e)
+
     return send_node(node)
 
 
@@ -220,7 +230,7 @@ def add_member(request):
     try:
         old_member = Member.objects.get(branch=branch, user=user)
         print('Member already exists')
-    except Member.DoesNotExist:    
+    except Member.DoesNotExist:
         member = Member(tree=branch.tree, branch=branch, user=user)
         member.save()
 
@@ -229,10 +239,25 @@ def add_member(request):
 
 def update(request):
     user = request.user
-    targets = Target.objects.filter(target=user, read=False)
+    current_branch_id = request.POST.get('current_branch_id')
+    
+    utargets = {}
+    ubranches = {}
+    utrees = {}
 
+    targets = Target.objects.filter(target=user, read=False)
+    for target in targets:
+        
+        if int(current_branch_id) == int(target.node.branch.id):
+            utargets[target.node.id] = 1
+        ubranches[target.node.branch.id] = 1
+        utrees[target.node.tree.id] = 1
+    
     response = {
         'ptype': 'update',
+        'utargets': list(utargets.keys()),
+        'ubranches': list(ubranches.keys()),
+        'utrees': list(utrees.keys()),
     }
     return JsonResponse(response)
 

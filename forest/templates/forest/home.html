@@ -12,7 +12,7 @@
 
     <div id="mains">
         <div>
-            <h2>my Trees</h2>
+            <h2>Trees</h2>
             <div class="treelist itemlist">
                 {% for tree in trees %}
                     <div class="listitem tree">
@@ -35,8 +35,8 @@
             <div class="branchlist itemlist">
                 {% for branch in branches %}
                     <div class="listitem branch">
-                        <p>{{ branch.subject }}</p>
-                        <p>{{ branch.members }}</p>
+                        <p class="branch_subject">{{ branch.subject }}</p>
+                        <p class="branch_members">{{ branch.members }}</p>
                         <p class="branch_id">{{ branch.id }}</p>
                         <p class="branch_created_on">{{ branch.created_on }}</p>
                     </div>
@@ -61,11 +61,9 @@
             <div class="nodelist itemlist">
                 {% for node in nodes %}
                     <div class="listitem node">
-                        <p>{{ node.sender }}</p>
-                        <p>{{ node.created_on }}</p>
-                        <p>{{ node.content }}</p>
-                        <p>{{ node.base.id }}</p>
-                        <p>{{ node.arrow.id }}</p>
+                        <p class="node_sender">{{ node.sender }}</p>
+                        <p class="node_created_on">{{ node.created_on }}</p>
+                        <p class="node_content">{{ node.content }}</p>
                         <p class="node_id">{{ node.id }}</p>
                     </div>
                 {% endfor %}

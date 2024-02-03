@@ -173,6 +173,7 @@ function make_branch(data){
     branch.classList.add('listitem');
     
     let branch_subject = document.createElement('p');
+    branch_subject.classList.add('branch_subject');
     branch_subject.innerHTML = data.subject;
 
     let branch_id = document.createElement('p');
@@ -319,6 +320,7 @@ function sort_nodes(){
         return a_id - b_id;
     });
     nodelist.append(nodes);
+    nodelist.scrollTop(nodelist.prop('scrollHeight'));
 }
 
 
@@ -335,9 +337,6 @@ function add_member(){
         return;
     }
 
-    
-    
-
     data = {
         'ptype': 'add_member',
         'branch_id': branch_id,
@@ -352,15 +351,16 @@ function add_member(){
 
 
 function update(){
+    const current_branch_id = parseInt($('.selected .branch_id').html());
     data = {
         'ptype': 'update',
+        'current_branch_id': current_branch_id,
     }
     ajaxPost(data, function (response){
-        say(response);
+        utargets = response.utargets;
+        say(utargets);
     });
 }
-
-
 
 
 // prevent form submission

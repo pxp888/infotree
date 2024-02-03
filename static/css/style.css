@@ -36,10 +36,12 @@ body {
     grid-template-columns: 1fr 1fr 2fr;
 }
 
-
+#mains h2 {
+    margin: 1rem;
+}
 
 .branch_id, .tree_id, .node_id, .hiddenform, .hidden {
-    display: none;
+    /* display: none; */
     color: blue;
     grid-column-start: 1;
     grid-column-end: 3;
