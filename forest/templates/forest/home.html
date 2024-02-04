@@ -11,7 +11,7 @@
     <div id="msg_list"></div>
 
     <div id="mains">
-        <div id="tree_section">
+        <div id="tree_section" class="mainsection">
             <h2>Trees</h2>
             <div class="treelist itemlist">
                 {% for tree in trees %}
@@ -21,16 +21,18 @@
                     </div>
                 {% endfor %}
             </div>
+            <div class="entrysection">
+                <form action="POST" class="genericForm2" id="treeform">
+                    {% csrf_token %}
+                    <label for="Topic">Topic: </label>
+                    <input type="text" name="Topic" id="tree_topic_input">
+                    <input type="submit" value="Create" id="add_tree_send">
+                </form>
+            </div>
 
-            <form action="POST" class="genericForm2" id="treeform">
-                {% csrf_token %}
-                <label for="Topic">Topic: </label>
-                <input type="text" name="Topic" id="tree_topic_input">
-                <input type="submit" value="Create" id="add_tree_send">
-            </form>
         </div>
 
-        <div id="branch_section">
+        <div id="branch_section" class="mainsection">
             <h2>Branches</h2>
             <div class="branchlist itemlist">
                 {% for branch in branches %}
@@ -42,21 +44,23 @@
                     </div>
                 {% endfor %}
             </div>
-            <form action="POST" class="genericForm2" id="branchform">
-                {% csrf_token %}
-                <label for="Subject">Subject: </label>
-                <input type="text" name="Subject" id="branch_subject_input">
-                <input type="submit" value="Create" id="add_branch_send">
-            </form>
-            <form action="POST" class="genericForm2" id="memberform">
-                {% csrf_token %}
-                <label for="Member">Member: </label>
-                <input type="text" name="Member" id="member_input">
-                <input type="submit" value="Add" id="memberform_send">
-            </form>
+            <div class="entrysection">
+                <form action="POST" class="genericForm2" id="branchform">
+                    {% csrf_token %}
+                    <label for="Subject">Subject: </label>
+                    <input type="text" name="Subject" id="branch_subject_input">
+                    <input type="submit" value="Create" id="add_branch_send">
+                </form>
+                <form action="POST" class="genericForm2" id="memberform">
+                    {% csrf_token %}
+                    <label for="Member">Member: </label>
+                    <input type="text" name="Member" id="member_input">
+                    <input type="submit" value="Add" id="memberform_send">
+                </form>
+            </div>
         </div>
 
-        <div id="node_section">
+        <div id="node_section" class="mainsection">
             <h2>Messages</h2>
             <div class="nodelist itemlist">
                 {% for node in nodes %}
@@ -68,13 +72,15 @@
                     </div>
                 {% endfor %}
             </div>
+            <div class="entrysection">
+                <form action="POST" class="genericForm2" id="quickreplyform">
+                    {% csrf_token %}
+                    <label for="Body">Message: </label>
+                    <textarea name="Body" id="quickreply_body" placeholder="type your message here ..."></textarea>
+                    <input type="submit" value="send" id="quickreply_send">
+                </form>
+            </div>
 
-            <form action="POST" class="genericForm2" id="quickreplyform">
-                {% csrf_token %}
-                <label for="Body">Message: </label>
-                <textarea name="Body" id="quickreply_body" placeholder="type your message here ..."></textarea>
-                <input type="submit" value="send" id="quickreply_send">
-            </form>
         </div>
     </div>
 
