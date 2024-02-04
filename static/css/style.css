@@ -16,23 +16,12 @@ body {
 .genericForm2 {
     display: flex;
     flex-direction: column;
-
     margin: .5rem;
 }
 
 .genericForm2 textarea {
     grid-column-start: 1;
     grid-column-end: 3;
-    min-height: 5.3rem;
-}
-
-#mains {
-    display: grid;
-    grid-template-columns: 1fr 1fr 3fr;
-}
-
-#mains h2 {
-    margin: 1rem;
 }
 
 .hiddenform, .hidden {
@@ -43,15 +32,48 @@ body {
 }
 
 
+#mains {
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    overflow-x: auto;
+}
+
+
+.mainsection {
+    
+    font-family: Roboto;
+
+}
+
+.mainsection h2 {
+    margin-left: 1rem;
+}
+
 .itemlist {
+    height: calc(100vh - 325px);
     overflow-y: auto;
-    height: 70vh;
-    /* background-color: var(--list_back_color); */
-    /* border: 1px solid rgb(190, 190, 190); */
-    border-left: 1px solid rgb(190, 190, 190);
     
     margin: .5rem;
 }
+
+
+
+#tree_section {
+    min-width: 200px;
+}
+
+
+#branch_section {
+    border-left: 1px solid rgb(190, 190, 190);
+    min-width: 300px;
+}
+
+#node_section {
+    border-left: 1px solid rgb(190, 190, 190);
+    min-width: 400px;
+}
+
+
 
 .listitem {
     background-color: white;
