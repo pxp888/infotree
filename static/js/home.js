@@ -239,6 +239,16 @@ function get_nodes(branch_id){
     });
 }
 
+function mark_read(node_id){
+    data = {
+        'ptype': 'mark_read',
+        'node_id': node_id,
+    }
+    ajaxPost(data, function (response){
+        say(response);
+    });
+}
+
 
 function get_node(node_id){
     data = {
@@ -247,6 +257,7 @@ function get_node(node_id){
     }
     ajaxPost(data, function (response){
         make_node(response);
+        mark_read(node_id);
     });
 }
 
@@ -306,6 +317,9 @@ function make_node(data){
     if (username === data.sender){
         node.classList.add('sentmessage');
     }
+    if (data.read===false){
+        node.classList.add('unread');
+    }
 
     nodelist.append(node);
     sort_nodes();
@@ -352,9 +366,9 @@ function add_member(){
 
 function update(){
     const current_branch_id = parseInt($('.selected .branch_id').html());
-    if (isNaN(current_branch_id)){
-        return;
-    }
+    // if (isNaN(current_branch_id)){
+    //     current_branch_id = -1;
+    // }
     data = {
         'ptype': 'update',
         'current_branch_id': current_branch_id,

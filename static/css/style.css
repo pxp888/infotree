@@ -121,7 +121,8 @@ p.node_content {
 }
 
 .node.unread {
-    background-color: var(--unread_color);
+    /* background-color: var(--unread_color); */
+    border: 3px solid var(--unread_color);
 }
 
 

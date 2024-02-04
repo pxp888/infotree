@@ -160,7 +160,7 @@ def get_branch(request):
     return send_branch(branch)
 
 
-def send_node(node):
+def send_node(node, user=None):
     response = {
         'ptype': 'send_node',
         'node_id': node.id,
@@ -168,8 +168,15 @@ def send_node(node):
         'content': node.content,
         'created_on': node.created_on.strftime('%b %d, %Y, %I:%M %p'),
         'branch_id': node.branch.id,
+        'read': 'na',
     }
-    return JsonResponse(response)
+    if user:
+        try:
+            target=Target.objects.get(node=node, target=user)
+            response['read'] = target.read
+        except Target.DoesNotExist:
+            response['read'] = 'na'
+    return response
 
 
 def add_node(request):
@@ -182,24 +189,17 @@ def add_node(request):
     node.save()
 
     makeTargets(node, branch)
-    return send_node(node)
+    response = send_node(node)
+    return JsonResponse(response)
 
 
 def get_node(request):
     node_id = request.POST.get('node_id')
     node = Node.objects.get(id=node_id)
 
-    try:
-        target = Target.objects.get(node=node, target=request.user, read=False)
-        target.read = True
-        target.save()
-    except Target.DoesNotExist:
-        pass 
-    except Exception as e:
-        print(e)
-
     cache.delete(request.user.username)
-    return send_node(node)
+    response = send_node(node, request.user)
+    return JsonResponse(response)
 
 
 def get_nodes(request):
@@ -253,8 +253,11 @@ def update(request):
 
     targets = Target.objects.filter(target=user, read=False)
     for target in targets:
-        if int(current_branch_id) == int(target.node.branch.id):
-            utargets[target.node.id] = 1
+        try:
+            if int(current_branch_id) == int(target.node.branch.id):
+                utargets[target.node.id] = 1
+        except:
+            pass
         ubranches[target.node.branch.id] = 1
         utrees[target.node.tree.id] = 1
     
@@ -265,6 +268,27 @@ def update(request):
         'utrees': list(utrees.keys()),
     }
     cache.set(user.username, response, 180)
+    return JsonResponse(response)
+
+
+def mark_read(request):
+    user = request.user
+    node_id = request.POST.get('node_id')
+
+    try:
+        node = Node.objects.get(id=node_id)
+        target = Target.objects.get(node=node, target=user)
+        target.read = True
+        target.save()
+    except Target.DoesNotExist:
+        print('Target DoesNotExist')
+    except Node.DoesNotExist:
+        print('Node DoesNotExist')
+
+    response = {
+        'ptype': 'mark_read',
+        'node_id': node_id,
+    }
     return JsonResponse(response)
 
 
@@ -279,5 +303,7 @@ funcs['add_node'] = add_node
 funcs['get_node'] = get_node
 funcs['add_member'] = add_member
 funcs['update'] = update
+funcs['mark_read'] = mark_read
+
 
 
