@@ -81,12 +81,12 @@ function make_tree(data){
 
     let tree_topic = document.createElement('p');
     tree_topic.innerHTML = data.topic;
-    
+
     let tree_id = document.createElement('p');
     tree_id.classList.add('tree_id');
     tree_id.classList.add('hidden');
     tree_id.innerHTML = data.tree_id;
-    
+
     tree.appendChild(tree_id);
     tree.appendChild(tree_topic);
     treelist.append(tree);
@@ -151,7 +151,7 @@ function get_branches(tree_id) {
             get_branch(branches[i]);
         }
     });
-    
+
 }
 
 
@@ -171,7 +171,7 @@ function make_branch(data){
     let branch = document.createElement('div');
     branch.classList.add('branch');
     branch.classList.add('listitem');
-    
+
     let branch_subject = document.createElement('p');
     branch_subject.classList.add('branch_subject');
     branch_subject.innerHTML = data.subject;
@@ -180,15 +180,15 @@ function make_branch(data){
     branch_id.classList.add('branch_id');
     branch_id.classList.add('hidden');
     branch_id.innerHTML = data.branch_id;
-    
+
     let branch_members = document.createElement('p');
     branch_members.classList.add('branch_members');
     branch_members.innerHTML = data.members;
-    
+
     branch.appendChild(branch_id);
     branch.appendChild(branch_subject);
     branch.appendChild(branch_members);
-    
+
     branchlist.append(branch);
     branch.addEventListener('click', branch_clicked);
     sort_branches();
@@ -245,7 +245,7 @@ function mark_read(node_id){
         'node_id': node_id,
     }
     ajaxPost(data, function (response){
-        say(response);
+        
     });
 }
 
@@ -286,29 +286,29 @@ function add_node(){
 
 
 function make_node(data){
-    const nodelist = $('.nodelist').first();
-    
+    const nodelist = $('.nodelist')[0];
+
     let node = document.createElement('div');
     node.classList.add('node');
     node.classList.add('listitem');
-    
+
     let node_content = document.createElement('p');
     node_content.classList.add('node_content');
     node_content.innerHTML = data.content;
-    
+
     let node_id = document.createElement('p');
     node_id.classList.add('node_id');
     node_id.classList.add('hidden');
     node_id.innerHTML = data.node_id;
-    
+
     let node_sender = document.createElement('p');
     node_sender.classList.add('node_sender');
     node_sender.innerHTML = data.sender;
-    
+
     let node_created_on = document.createElement('p');
     node_created_on.classList.add('node_created_on');
     node_created_on.innerHTML = data.created_on;
-    
+
     node.appendChild(node_id);
     node.appendChild(node_sender);
     node.appendChild(node_created_on);
@@ -321,21 +321,41 @@ function make_node(data){
         node.classList.add('unread');
     }
 
-    nodelist.append(node);
-    sort_nodes();
+    const nodes = nodelist.children;
+    if (nodes.length === 0){
+        nodelist.append(node);
+    }
+    else{
+        let last_node = nodes[nodes.length-1];
+        let last_node_id = last_node.querySelector('.node_id').innerHTML;
+        if (data.node_id > last_node_id){
+            nodelist.append(node);
+        }
+        else{
+            for (let i = 0; i < nodes.length; i++){
+                let node_id = nodes[i].querySelector('.node_id').innerHTML;
+                if (data.node_id < node_id){
+                    nodelist.insertBefore(node, nodes[i]);
+                    break;
+                }
+            }
+        }
+    }
+    // scroll to bottom 
+    nodelist.scrollTop = nodelist.scrollHeight;
 }
 
-function sort_nodes(){
-    const nodelist = $('.nodelist').first();
-    let nodes = nodelist.children();
-    nodes.sort(function(a, b){
-        let a_id = a.querySelector('.node_id').innerHTML;
-        let b_id = b.querySelector('.node_id').innerHTML;
-        return a_id - b_id;
-    });
-    nodelist.append(nodes);
-    nodelist.scrollTop(nodelist.prop('scrollHeight'));
-}
+// function sort_nodes(){
+//     const nodelist = $('.nodelist').first();
+//     let nodes = nodelist.children();
+//     nodes.sort(function(a, b){
+//         let a_id = a.querySelector('.node_id').innerHTML;
+//         let b_id = b.querySelector('.node_id').innerHTML;
+//         return a_id - b_id;
+//     });
+//     nodelist.append(nodes);
+//     nodelist.scrollTop(nodelist.prop('scrollHeight'));
+// }
 
 
 function add_member(){
@@ -374,7 +394,7 @@ function update(){
         'current_branch_id': current_branch_id,
     }
     ajaxPost(data, function (response){
-        
+
         utargets = response.utargets;
         for (let i = 0; i < utargets.length; i++){
             get_node(utargets[i]);
