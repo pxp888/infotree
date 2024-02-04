@@ -346,18 +346,6 @@ function make_node(data){
     nodelist.scrollTop = nodelist.scrollHeight;
 }
 
-// function sort_nodes(){
-//     const nodelist = $('.nodelist').first();
-//     let nodes = nodelist.children();
-//     nodes.sort(function(a, b){
-//         let a_id = a.querySelector('.node_id').innerHTML;
-//         let b_id = b.querySelector('.node_id').innerHTML;
-//         return a_id - b_id;
-//     });
-//     nodelist.append(nodes);
-//     nodelist.scrollTop(nodelist.prop('scrollHeight'));
-// }
-
 
 function add_member(){
     const branch_id = $('.selected .branch_id').html();
@@ -387,9 +375,7 @@ function add_member(){
 
 function update(){
     const current_branch_id = parseInt($('.selected .branch_id').html());
-    // if (isNaN(current_branch_id)){
-    //     current_branch_id = -1;
-    // }
+    
     data = {
         'ptype': 'update',
         'current_branch_id': current_branch_id,
@@ -413,19 +399,6 @@ function update(){
                 branch.classList.remove('unread');
             }
         }
-
-        // utrees = response.utrees;
-        // let tree_ids = $('.tree_id');
-        // for (let i = 0; i < tree_ids.length; i++){
-        //     let tree_id = parseInt(tree_ids[i].innerHTML);
-        //     let tree = tree_ids[i].parentElement;
-        //     if (utrees.includes(tree_id)){
-        //         tree.classList.add('unread');
-        //     }
-        //     else{
-        //         tree.classList.remove('unread');
-        //     }
-        // }
 
         utrees = response.utrees;
         let tree_obs = $('.tree_id');
