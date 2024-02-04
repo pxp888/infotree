@@ -360,9 +360,36 @@ function update(){
         'current_branch_id': current_branch_id,
     }
     ajaxPost(data, function (response){
+        
         utargets = response.utargets;
         for (let i = 0; i < utargets.length; i++){
             get_node(utargets[i]);
+        }
+
+        ubranches = response.ubranches;
+        let branch_ids = $('.branch_id');
+        for (let i = 0; i < branch_ids.length; i++){
+            let branch_id = parseInt(branch_ids[i].innerHTML);
+            let branch = branch_ids[i].parentElement;
+            if (ubranches.includes(branch_id)){
+                branch.classList.add('unread');
+            }
+            else{
+                branch.classList.remove('unread');
+            }
+        }
+
+        utrees = response.utrees;
+        let tree_ids = $('.tree_id');
+        for (let i = 0; i < tree_ids.length; i++){
+            let tree_id = parseInt(tree_ids[i].innerHTML);
+            let tree = tree_ids[i].parentElement;
+            if (utrees.includes(tree_id)){
+                tree.classList.add('unread');
+            }
+            else{
+                tree.classList.remove('unread');
+            }
         }
     });
 }

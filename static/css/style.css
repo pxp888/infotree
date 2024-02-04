@@ -3,6 +3,9 @@
     /* --list_back_color: rgb(247 243 236); */
     /* --list_back_color: rgb(243, 241, 237); */
     --list_back_color: rgb(255 248 236);
+
+    --unread_color: rgb(255, 207, 123);
+
 }
 
 body {
@@ -117,6 +120,11 @@ p.node_content {
     grid-column-end: 3;
 }
 
+.node.unread {
+    background-color: var(--unread_color);
+}
+
+
 .branch {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -128,5 +136,13 @@ p.node_content {
 
     font-size: 14px;
     color: var(--user_color);
+}
+
+.branch.unread {
+    border: 3px solid var(--unread_color);
+}
+
+.tree.unread {
+    border: 3px solid var(--unread_color);
 }
 
