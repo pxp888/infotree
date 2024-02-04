@@ -116,8 +116,40 @@ function make_tree(data){
 }
 
 
+function remove_tree(tree_id){
+    let userConfirmed = confirm('Are you sure you want to remove this tree?');
+    if (!userConfirmed){
+        return;
+    }
+
+    data = {
+        'ptype': 'remove_tree',
+        'tree_id': tree_id,
+    }
+    ajaxPost(data, function (response){
+        const trees = $('.tree');
+        for (let i = 0; i < trees.length; i++){
+            if (trees[i].querySelector('.tree_id').innerHTML === tree_id){
+                trees[i].remove();
+                break;
+            }
+        }
+        const branchlist = $('.branchlist.itemlist');
+        branchlist.empty();
+        const nodelist = $('.nodelist.itemlist');
+        nodelist.empty();
+    });
+}
+
+
 function tree_clicked(event){
     let target = event.target;
+    if(target.classList.contains('remove_button')){
+        let tree_id = target.parentElement.querySelector('.tree_id').innerHTML;
+        remove_tree(tree_id);
+        return;
+    }
+
     if(target.tagName === 'P'){
         target = target.parentElement;
     }
@@ -264,6 +296,8 @@ function remove_branch(branch_id){
                 break;
             }
         }
+        const nodelist = $('.nodelist.itemlist');
+        nodelist.empty();
     });
 }
 
