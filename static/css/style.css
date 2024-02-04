@@ -13,21 +13,6 @@ body {
     background-color: rgb(247 243 236);
 }
 
-
-.genericForm1 {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    margin: .5rem;
-    align-items: baseline;
-}
-
-
-
-.genericForm1 label {
-    grid-column-start: 1;
-    font-size: 14px;
-}
-
 .genericForm2 {
     display: flex;
     flex-direction: column;
@@ -61,8 +46,10 @@ body {
 .itemlist {
     overflow-y: auto;
     height: 70vh;
-    background-color: var(--list_back_color);
-    border: 1px solid rgb(190, 190, 190);
+    /* background-color: var(--list_back_color); */
+    /* border: 1px solid rgb(190, 190, 190); */
+    border-left: 1px solid rgb(190, 190, 190);
+    
     margin: .5rem;
 }
 
@@ -121,10 +108,8 @@ p.node_content {
 }
 
 .node.unread {
-    /* background-color: var(--unread_color); */
     border: 3px solid var(--unread_color);
 }
-
 
 .branch {
     display: grid;
