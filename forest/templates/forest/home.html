@@ -24,7 +24,7 @@
             <div class="entrysection">
                 <form action="POST" class="genericForm2" id="treeform">
                     {% csrf_token %}
-                    <label for="Topic">Topic: </label>
+                    <label for="tree_topic_input">Topic: </label>
                     <input type="text" name="Topic" id="tree_topic_input">
                     <input type="submit" value="Create" id="add_tree_send" class="hidden">
                 </form>
@@ -37,9 +37,9 @@
             <div class="branchlist itemlist">
                 {% for branch in branches %}
                     <div class="listitem branch">
+                        <p class="branch_id">{{ branch.id }}</p>
                         <p class="branch_subject">{{ branch.subject }}</p>
                         <p class="branch_members">{{ branch.members }}</p>
-                        <p class="branch_id">{{ branch.id }}</p>
                         <p class="branch_created_on">{{ branch.created_on }}</p>
                     </div>
                 {% endfor %}
@@ -47,13 +47,13 @@
             <div class="entrysection">
                 <form action="POST" class="genericForm2" id="branchform">
                     {% csrf_token %}
-                    <label for="Subject">Subject: </label>
+                    <label for="branch_subject_input">Subject: </label>
                     <input type="text" name="Subject" id="branch_subject_input">
                     <input type="submit" value="Create" id="add_branch_send" class="hidden">
                 </form>
                 <form action="POST" class="genericForm2" id="memberform">
                     {% csrf_token %}
-                    <label for="Member">Member: </label>
+                    <label for="member_input">Member: </label>
                     <input type="text" name="Member" id="member_input">
                     <input type="submit" value="Add" id="memberform_send" class="hidden">
                 </form>
@@ -75,7 +75,7 @@
             <div class="entrysection">
                 <form action="POST" class="genericForm2" id="quickreplyform">
                     {% csrf_token %}
-                    <label for="Body">Message: </label>
+                    <label for="quickreply_body">Message: </label>
                     <textarea name="Body" id="quickreply_body" placeholder="type your message here ..."></textarea>
                     <input type="submit" value="send" id="quickreply_send">
                 </form>
@@ -88,5 +88,6 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/home.js' %}"></script>
+    <script src="{% static 'js/remover.js' %}"></script>
 {% endblock %}
 

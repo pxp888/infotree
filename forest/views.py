@@ -292,6 +292,20 @@ def mark_read(request):
     return JsonResponse(response)
 
 
+def remove_branch(request):
+    branch_id = request.POST.get('branch_id')
+    branch = Branch.objects.get(id=branch_id)
+    tree_id = branch.tree.id
+    branch.delete()
+
+    response = {
+        'ptype': 'remove_branch',
+        'branch_id': branch_id,
+        'tree_id': tree_id,
+    }
+    return JsonResponse(response)
+
+
 funcs['add_tree'] = add_tree
 funcs['get_trees'] = get_trees
 funcs['get_tree'] = get_tree
@@ -304,6 +318,6 @@ funcs['get_node'] = get_node
 funcs['add_member'] = add_member
 funcs['update'] = update
 funcs['mark_read'] = mark_read
-
+funcs['remove_branch'] = remove_branch
 
 

@@ -23,7 +23,6 @@ function add_tree(){
 
     const current_topics = $('.tree_topic');
     for (let i = 0; i < current_topics.length; i++){
-        say(current_topics[i].innerHTML, tree_topic)
         if (current_topics[i].innerHTML === tree_topic){
             current_topics[i].parentElement.click();
             return;
@@ -101,8 +100,15 @@ function make_tree(data){
     tree_id.classList.add('hidden');
     tree_id.innerHTML = data.tree_id;
 
+    
     tree.appendChild(tree_id);
     tree.appendChild(tree_topic);
+
+    let remove_button = document.createElement('p');
+    remove_button.classList.add('remove_button');
+    remove_button.innerHTML = 'Remove';
+    tree.appendChild(remove_button);
+
     treelist.append(tree);
     tree.addEventListener('click', tree_clicked);
     sort_trees();
@@ -192,6 +198,7 @@ function get_branch(branch_id) {
 }
 
 
+
 function make_branch(data){
     const branchlist = $('.branchlist').first();
     let branch = document.createElement('div');
@@ -215,6 +222,11 @@ function make_branch(data){
     branch.appendChild(branch_subject);
     branch.appendChild(branch_members);
 
+    let remove_button = document.createElement('p');
+    remove_button.classList.add('remove_button');
+    remove_button.innerHTML = 'Remove';
+    branch.appendChild(remove_button);
+
     branchlist.append(branch);
     branch.addEventListener('click', branch_clicked);
     sort_branches();
@@ -234,12 +246,41 @@ function sort_branches(){
 }
 
 
+function remove_branch(branch_id){
+    let userConfirmed = confirm('Are you sure you want to remove this branch?');
+    if (!userConfirmed){
+        return;
+    }
+
+    data = {
+        'ptype': 'remove_branch',
+        'branch_id': branch_id,
+    }
+    ajaxPost(data, function (response){
+        const branches = $('.branch');
+        for (let i = 0; i < branches.length; i++){
+            if (branches[i].querySelector('.branch_id').innerHTML === branch_id){
+                branches[i].remove();
+                break;
+            }
+        }
+    });
+}
+
+
 function branch_clicked(event){
     let target = event.target;
+    if(target.classList.contains('remove_button')){
+        let branch_id = target.parentElement.querySelector('.branch_id').innerHTML;
+        remove_branch(branch_id);
+        return;
+    }
+    
     if(target.tagName === 'P'){
         target = target.parentElement;
     }
-    let branch_id = target.querySelector('.branch_id').innerHTML;
+    // let branch_id = target.querySelector('.branch_id').innerHTML;
+    let branch_id = target.children[0].innerHTML;
 
     let branches = $('.branch');
     for (let i = 0; i < branches.length; i++){
