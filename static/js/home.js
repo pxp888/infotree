@@ -31,8 +31,9 @@ function add_tree(){
         'topic': tree_topic,
     }
     ajaxPost(data, function (response){
-        say(response);
-        make_tree(response);
+        new_tree = make_tree(response);
+        $('.tree').removeClass('selected');
+        new_tree.classList.add('selected');
     });
 }
 
@@ -92,6 +93,7 @@ function make_tree(data){
     treelist.append(tree);
     tree.addEventListener('click', tree_clicked);
     sort_trees();
+    return tree;
 }
 
 
@@ -341,7 +343,6 @@ function make_node(data){
             }
         }
     }
-    // scroll to bottom 
     nodelist.scrollTop = nodelist.scrollHeight;
 }
 
@@ -413,16 +414,35 @@ function update(){
             }
         }
 
+        // utrees = response.utrees;
+        // let tree_ids = $('.tree_id');
+        // for (let i = 0; i < tree_ids.length; i++){
+        //     let tree_id = parseInt(tree_ids[i].innerHTML);
+        //     let tree = tree_ids[i].parentElement;
+        //     if (utrees.includes(tree_id)){
+        //         tree.classList.add('unread');
+        //     }
+        //     else{
+        //         tree.classList.remove('unread');
+        //     }
+        // }
+
         utrees = response.utrees;
-        let tree_ids = $('.tree_id');
-        for (let i = 0; i < tree_ids.length; i++){
-            let tree_id = parseInt(tree_ids[i].innerHTML);
-            let tree = tree_ids[i].parentElement;
+        let tree_obs = $('.tree_id');
+        let tree_ids = [];
+        for (let i = 0; i < tree_obs.length; i++){
+            tree_id = parseInt(tree_obs[i].innerHTML);
+            tree_ids.push(tree_id);
             if (utrees.includes(tree_id)){
-                tree.classList.add('unread');
+                tree_obs[i].parentElement.classList.add('unread');
             }
             else{
-                tree.classList.remove('unread');
+                tree_obs[i].parentElement.classList.remove('unread');
+            }
+        }
+        for (let i = 0; i < utrees.length; i++){
+            if (!tree_ids.includes(utrees[i])){
+                get_tree(utrees[i]);
             }
         }
     });
