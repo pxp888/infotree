@@ -35,6 +35,8 @@ function add_tree(){
         $('.tree').removeClass('selected');
         new_tree.classList.add('selected');
     });
+    $('#branch_subject_input').focus();
+    new_tree.click();
 }
 
 
@@ -139,6 +141,8 @@ function add_branch() {
         new_branch.classList.add('selected');
     });
     $('#branch_subject_input').val('');
+    $('#member_input').focus();
+    new_branch.click();
 }
 
 
@@ -370,6 +374,7 @@ function add_member(){
         thing.innerHTML = response.members;
     });
     $('#member_input').val('');
+    $('#quickreply_body').focus();
 }
 
 
@@ -446,6 +451,33 @@ $('#add_tree_send').click(add_tree);
 $('#add_branch_send').click(add_branch);
 $('#quickreply_send').click(add_node);
 $('#memberform_send').click(add_member);
+
+$('#tree_topic_input').blur(function(){
+    if ($('#tree_topic_input').val() === ''){
+        return;
+    }
+    else{
+        add_tree();
+    }
+})
+
+$('#branch_subject_input').blur(function(){
+    if ($('#branch_subject_input').val() === ''){
+        return;
+    }
+    else{
+        add_branch();
+    }
+})
+
+$('#member_input').blur(function(){
+    if ($('#member_input').val() === ''){
+        return;
+    }
+    else{
+        add_member();
+    }
+})
 
 
 get_trees();
