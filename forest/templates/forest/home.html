@@ -26,7 +26,7 @@
                     {% csrf_token %}
                     <label for="Topic">Topic: </label>
                     <input type="text" name="Topic" id="tree_topic_input">
-                    <input type="submit" value="Create" id="add_tree_send">
+                    <input type="submit" value="Create" id="add_tree_send" class="hidden">
                 </form>
             </div>
 
@@ -49,13 +49,13 @@
                     {% csrf_token %}
                     <label for="Subject">Subject: </label>
                     <input type="text" name="Subject" id="branch_subject_input">
-                    <input type="submit" value="Create" id="add_branch_send">
+                    <input type="submit" value="Create" id="add_branch_send" class="hidden">
                 </form>
                 <form action="POST" class="genericForm2" id="memberform">
                     {% csrf_token %}
                     <label for="Member">Member: </label>
                     <input type="text" name="Member" id="member_input">
-                    <input type="submit" value="Add" id="memberform_send">
+                    <input type="submit" value="Add" id="memberform_send" class="hidden">
                 </form>
             </div>
         </div>

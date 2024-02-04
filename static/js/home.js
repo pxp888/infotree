@@ -20,6 +20,16 @@ function ajaxPost(data, successfunc) {
 
 function add_tree(){
     const tree_topic = $('#tree_topic_input').val();
+
+    const current_topics = $('.tree_topic');
+    for (let i = 0; i < current_topics.length; i++){
+        say(current_topics[i].innerHTML, tree_topic)
+        if (current_topics[i].innerHTML === tree_topic){
+            current_topics[i].parentElement.click();
+            return;
+        }
+    }
+
     $('#tree_topic_input').val('');
 
     if(tree_topic === ''){
@@ -31,12 +41,12 @@ function add_tree(){
         'topic': tree_topic,
     }
     ajaxPost(data, function (response){
-        new_tree = make_tree(response);
+        let new_tree = make_tree(response);
         $('.tree').removeClass('selected');
         new_tree.classList.add('selected');
+        new_tree.click();
     });
     $('#branch_subject_input').focus();
-    new_tree.click();
 }
 
 
@@ -84,6 +94,7 @@ function make_tree(data){
 
     let tree_topic = document.createElement('p');
     tree_topic.innerHTML = data.topic;
+    tree_topic.classList.add('tree_topic');
 
     let tree_id = document.createElement('p');
     tree_id.classList.add('tree_id');
@@ -121,6 +132,15 @@ function tree_clicked(event){
 
 function add_branch() {
     const branch_subject = $('#branch_subject_input').val();
+
+    const current_subjects = $('.branch_subject');
+    for (let i = 0; i < current_subjects.length; i++){
+        if (current_subjects[i].innerHTML === branch_subject){
+            current_subjects[i].parentElement.click();
+            return;
+        }
+    }
+
     const tree_id = $('.selected .tree_id').html();
     if (tree_id === undefined){
         alert('Please select a tree');
@@ -136,13 +156,13 @@ function add_branch() {
         'subject': branch_subject,
     }
     ajaxPost(data, function (response){
-        new_branch = make_branch(response);
+        let new_branch = make_branch(response);
         $('.branch').removeClass('selected');
         new_branch.classList.add('selected');
+        new_branch.click();
     });
     $('#branch_subject_input').val('');
     $('#member_input').focus();
-    new_branch.click();
 }
 
 
