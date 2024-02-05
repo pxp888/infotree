@@ -7,80 +7,52 @@
 
 
 {% block content %}
-    <p>{{ msg }}</p>
-    <div id="msg_list"></div>
+    <p id="msg_line">{{ msg }}</p>
 
-    <div id="mains">
-        <div id="tree_section" class="mainsection">
-            <h2>Trees</h2>
-            <div class="treelist itemlist">
-                {% for tree in trees %}
-                    <div class="listitem tree">
-                        <p class="tree_topic">{{ tree.topic }}</p>
-                        <p class="tree_id">{{ tree.id }}</p>
-                    </div>
-                {% endfor %}
+    <div class="mains">
+        <div class="browser mainsection">
+            <h2>Browser</h2>
+
+            <div class="location_bar">
+                <div id="homehiv"><p>Home</p></div>
+                <div id="backdiv"><p>Back</p></div>
+                <p id="pathline">/</p>
             </div>
+            
+            <div class="itemlist folderlist">
+                <div class="listitem folder sample">
+                    <p class="name">Folder</p>
+                    <p class="members">Bob, Alice</p>
+                </div> 
+            </div>
+
             <div class="entrysection">
-                <form action="POST" class="genericForm2" id="treeform">
+                <form action="POST" class="genericForm">
                     {% csrf_token %}
-                    <label for="tree_topic_input">Topic: </label>
-                    <input type="text" name="Topic" id="tree_topic_input">
-                    <input type="submit" value="Create" id="add_tree_send" class="hidden">
-                </form>
-            </div>
-
-        </div>
-
-        <div id="branch_section" class="mainsection">
-            <h2>Branches</h2>
-            <div class="branchlist itemlist">
-                {% for branch in branches %}
-                    <div class="listitem branch">
-                        <p class="branch_id">{{ branch.id }}</p>
-                        <p class="branch_subject">{{ branch.subject }}</p>
-                        <p class="branch_members">{{ branch.members }}</p>
-                        <p class="branch_created_on">{{ branch.created_on }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="entrysection">
-                <form action="POST" class="genericForm2" id="branchform">
-                    {% csrf_token %}
-                    <label for="branch_subject_input">Subject: </label>
-                    <input type="text" name="Subject" id="branch_subject_input">
-                    <input type="submit" value="Create" id="add_branch_send" class="hidden">
-                </form>
-                <form action="POST" class="genericForm2" id="memberform">
-                    {% csrf_token %}
-                    <label for="member_input">Add Member: </label>
-                    <input type="text" name="Member" id="member_input">
-                    <input type="submit" value="Add" id="memberform_send" class="hidden">
+                    <label for="new_folder_name_line">Folder Name:</label>
+                    <input type="text" id="new_folder_name_line">
+                    <label for="add_member_line">Add Member:</label>
+                    <input type="text" id="add_member_line">
                 </form>
             </div>
         </div>
 
-        <div id="node_section" class="mainsection">
+        <div class="viewer mainsection">
             <h2>Messages</h2>
-            <div class="nodelist itemlist">
-                {% for node in nodes %}
-                    <div class="listitem node">
-                        <p class="node_sender">{{ node.sender }}</p>
-                        <p class="node_created_on">{{ node.created_on }}</p>
-                        <p class="node_content">{{ node.content }}</p>
-                        <p class="node_id">{{ node.id }}</p>
-                    </div>
-                {% endfor %}
+            <div class="itemlist nodelist">
+                <div class="listitem message sample">
+                    <p class="members">Bob, Alice</p>
+                    <p class="created_on">Today</p>
+                    <p class="content">Hello, World!</p>
+                </div>
             </div>
             <div class="entrysection">
-                <form action="POST" class="genericForm2" id="quickreplyform">
+                <form action="POST" class="genericForm">
                     {% csrf_token %}
-                    <label for="quickreply_body">Message: </label>
-                    <textarea name="Body" id="quickreply_body" placeholder="type your message here ..."></textarea>
-                    <input type="submit" value="send" id="quickreply_send">
+                    <label for="new_message_line">Message:</label>
+                    <input type="text" id="new_message_line">
                 </form>
-            </div>
-
+            </div>                
         </div>
     </div>
 
@@ -88,6 +60,5 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/home.js' %}"></script>
-    <script src="{% static 'js/remover.js' %}"></script>
 {% endblock %}
 
