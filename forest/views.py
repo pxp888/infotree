@@ -183,7 +183,21 @@ def send_message(request):
     
     return send_node(new_node.id)
 
-    
+
+def mark_read(request):
+    user = request.user
+    node_id = request.POST.get('node_id')
+    node = Node.objects.get(pk=node_id)
+    target = Target.objects.get(node=node, target=user)
+    target.read = True
+    target.save()
+    response = {
+        'action': 'mark_read',
+        'node_id': node_id,
+    }
+    return JsonResponse(response)
+
+
 funcs['add_node'] = add_node
 funcs['get_folders'] = get_folders
 funcs['get_folder'] = get_folder
@@ -191,7 +205,7 @@ funcs['get_nodes'] = get_nodes
 funcs['get_node'] = get_node
 funcs['add_member'] = add_member
 funcs['send_message'] = send_message
-
+funcs['mark_read'] = mark_read
 
 
 

@@ -47,10 +47,11 @@ function draw_node(data) {
         node.addClass('sent');}
     if (data.folder === true) {
         node.addClass('nfolder');}
-    if (data.read === false) {
-        say(data.read);
+    let read_index = data.members.indexOf(username);
+    let node_read = data.read[read_index];
+    if (node_read === false) {
         node.addClass('unread');}
-
+    
     // insert node into nodelist in order of node_id
     let nodelist = $('.nodelist');
     let nodes = nodelist.children().not('.sample');
@@ -73,6 +74,14 @@ function draw_node(data) {
             });
         }
     }
+
+    data = {
+        'action': 'mark_read',
+        'node_id': data.node_id,
+    }
+    ajaxPost(data, function(response) {
+        say('mark_read', response);
+    });
 }
 
 
@@ -240,7 +249,7 @@ function send_message() {
     });
 }
 
-function home_clicked() {
+function clear_folder_selection() {
     $('.folder').removeClass('selected');
     pathline.html('/');
     get_nodes(0);
@@ -257,7 +266,8 @@ $('.genericForm').submit(function(event) {
 $('#new_folder_line').blur(add_folder);
 $('#add_member_line').blur(add_member);
 $('#send_message_button').click(send_message);
-$('#homediv').click(home_clicked);
+$('#homediv').click(clear_folder_selection);
+$('.folderlist').click(clear_folder_selection);
 
 
 get_folders();
