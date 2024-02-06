@@ -1,5 +1,6 @@
 :root {
-    --user_color: rgb(122 132 145);
+    --user_color: rgb(52 58 66);
+    --sent_color: rgb(255 230 210);
     /* --list_back_color: rgb(247 243 236); */
     /* --list_back_color: rgb(243, 241, 237); */
     --list_back_color: rgb(255 248 236);
@@ -10,7 +11,7 @@
 
 body {
     font-family: Roboto, sans-serif;
-    background-color: rgb(247 243 236);
+    background-color: rgb(255 242 220);
 }
 
 
@@ -21,7 +22,7 @@ body {
     grid-column-end: 3;
 }
 
-.sample {
+.listitem.sample {
     display: none;
 }
 
@@ -120,9 +121,11 @@ body {
 /* Viewer Specific Items */
 
 
-.message {
+.node {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    
+    margin: 0 5rem 0 0;
 }
 
 .created_on {
@@ -132,6 +135,18 @@ body {
     justify-self: right;
 
     grid-column-start: 2;
-
 }
 
+.node .content {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.node.sent {
+    background-color: var(--sent_color);
+    margin: 0 0 0 5rem;
+}
+
+.node.nfolder {
+    margin: 0 0 0 0;
+}

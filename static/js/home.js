@@ -27,10 +27,21 @@ function draw_node(data) {
     node.removeClass('sample');
 
     node.find('.node_id').html(data.node_id);
-    node.find('.members').html(data.members);
     node.find('.content').html(data.content);
     node.find('.created_on').html(data.created_on);
     node.find('.author').html('auth:' + data.author);
+
+    let memlist = data.author + ' : ';
+    for (let i = 0; i < data.members.length; i++) {
+        if (data.members[i] !== username) {
+            memlist += data.members[i] + ', ';}
+    }
+    node.find('.members').html(memlist);
+
+    if (data.author === username && data.folder === false) {
+        node.addClass('sent');}
+    else if (data.folder === true) {
+        node.addClass('nfolder');}
 
     $('.nodelist').append(node);
 }
@@ -49,7 +60,6 @@ function get_node(node_id) {
 function get_nodes(base_id) {
     $('.nodelist').children().not('.sample').remove();
 
-
     ajaxPost({
         action: 'get_nodes',
         base_id: base_id,
@@ -63,18 +73,18 @@ function get_nodes(base_id) {
 
 
 function org_folders() {
-    let nods = [];
-    let bods = [];
-    let fods = $('.folder');
-    for (let i = 0; i < fods.length; i++) {
-        nods.push(fods[i].querySelector('.node_id').innerHTML);
-        bods.push(fods[i].querySelector('.base_id').innerHTML);
+    let node_ids = [];
+    let basenode_ids = [];
+    let folders = $('.folder');
+    for (let i = 0; i < folders.length; i++) {
+        node_ids.push(folders[i].querySelector('.node_id').innerHTML);
+        basenode_ids.push(folders[i].querySelector('.base_id').innerHTML);
     }
-    for (let i = 0; i < nods.length; i++) {
-        for (let j=0; j < bods.length; j++) {
-            if (nods[i] === bods[j]) {
-                let kids = fods[i].querySelector('.kids');
-                kids.append(fods[j]);
+    for (let i = 0; i < node_ids.length; i++) {
+        for (let j=0; j < basenode_ids.length; j++) {
+            if (node_ids[i] === basenode_ids[j]) {
+                let kids = folders[i].querySelector('.kids');
+                kids.append(folders[j]);
             }
         }
     }
@@ -114,7 +124,6 @@ function draw_folder(data){
     $('.folderlist').append(folder);
     
     org_folders();
-
 }
 
 
@@ -129,18 +138,15 @@ function get_folder(node_id) {
 
 
 function get_folders() {
-    // $('.folderlist').empty();
     ajaxPost({
         action: 'get_folders',
     }, function(response) {
         let folders = response.folders;
-        // call get_folder for each folder
         for (let i = 0; i < folders.length; i++) {
             get_folder(folders[i]);
         }
     });
 }
-
 
 
 function add_folder() {
@@ -164,8 +170,11 @@ function add_folder() {
 function add_member() {
     const member = $('#add_member_line').val();
     const node_id = $('.selected .node_id').html();
-
+    if (node_id === undefined) { 
+        say('node_id is undefined');
+        return; }
     if (member.length === 0) { return; }
+    
     $('#add_member_line').val('');
 
     ajaxPost({
@@ -173,7 +182,35 @@ function add_member() {
         'member': member,
         'node_id': node_id,
     }, function(response) {
-        say(response);
+        draw_folder(response);
+    });
+}
+
+
+
+
+
+function send_message() {
+    const message = $('#new_message_line').val();
+    const base_id = $('.selected .node_id').html();
+    // if base_id is undefined, return
+
+    if (base_id === undefined) { 
+        say('base_id is undefined');
+        return; }
+    if (message.length === 0) { 
+        say('message is empty');
+        return; }
+
+    $('#new_message_line').val('');
+
+    data = {
+        'action': 'send_message',
+        'content': message,
+        'base_id': base_id,
+    }
+    ajaxPost(data, function(response) {
+        draw_node(response);
     });
 }
 
@@ -188,6 +225,7 @@ $('.genericForm').submit(function(event) {
 // Event Listeners
 $('#new_folder_line').blur(add_folder);
 $('#add_member_line').blur(add_member);
+$('#send_message_button').click(send_message);
 // $('#homediv').click(home_clicked);
 
 

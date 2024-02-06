@@ -117,7 +117,6 @@ def get_folder(request):
 def get_nodes(request):
     user = request.user
     base_id = request.POST.get('base_id')
-
     targets = Target.objects.filter(target=user, node__base=base_id)
     nodes = []
     for target in targets:
@@ -154,6 +153,36 @@ def add_member(request):
     target.save()
     return send_node(node_id)
 
+
+def send_message(request):
+    user = request.user
+    base_id = request.POST.get('base_id')
+    content = request.POST.get('content')
+    print(base_id, content)
+
+    try:
+        base = Node.objects.get(pk=base_id)
+    except Node.DoesNotExist:
+        response = {
+            'action': 'error',
+            'error': 'Basenode does not exist',
+        }
+        return JsonResponse(response)
+    
+    new_node = Node.objects.create(author=user, content=content, base=base)
+    new_node.path = base.path + 'm' + str(new_node.id) + '/'
+    new_node.save()
+
+    targets = Target.objects.filter(node=base)
+    for target in targets:
+        if target.target != user:
+            new_target = Target.objects.create(node=new_node, target=target.target, read=False)
+        else:
+            new_target = Target.objects.create(node=new_node, target=target.target, read=True)
+        new_target.save()
+    
+    return send_node(new_node.id)
+
     
 funcs['add_node'] = add_node
 funcs['get_folders'] = get_folders
@@ -161,6 +190,7 @@ funcs['get_folder'] = get_folder
 funcs['get_nodes'] = get_nodes
 funcs['get_node'] = get_node
 funcs['add_member'] = add_member
+funcs['send_message'] = send_message
 
 
 
