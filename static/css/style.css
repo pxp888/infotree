@@ -117,6 +117,17 @@ body {
     margin-top: .5rem;
 }
 
+.folder {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.folder .kids {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
 
 /* Viewer Specific Items */
 
@@ -148,5 +159,10 @@ body {
 }
 
 .node.nfolder {
-    margin: 0 0 0 0;
+    margin: 0 10rem;
+    background-color: wheat;
+}
+
+.node.unread {
+    background-color: var(--unread_color);
 }

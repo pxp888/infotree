@@ -23,6 +23,13 @@ function ajaxPost(data, successfunc) {
 
 
 function draw_node(data) {
+    // remove an existing div with node_id=data.node_id
+    let existing = $('.nodelist').find('.node_id:contains(' + data.node_id + ')').closest('.node');
+    if (existing.length > 0) {
+        existing.remove();
+    }
+
+    // create a new div with the data
     let node = $('.node.sample').clone();
     node.removeClass('sample');
 
@@ -31,19 +38,41 @@ function draw_node(data) {
     node.find('.created_on').html(data.created_on);
     node.find('.author').html('auth:' + data.author);
 
-    let memlist = data.author + ' : ';
-    for (let i = 0; i < data.members.length; i++) {
-        if (data.members[i] !== username) {
-            memlist += data.members[i] + ', ';}
-    }
+    // define memlist as data.members without data.author
+    let tolist = data.members.filter(member => member !== data.author).join(', ');
+    let memlist = data.author + ' : ' + tolist;
     node.find('.members').html(memlist);
 
     if (data.author === username && data.folder === false) {
         node.addClass('sent');}
-    else if (data.folder === true) {
+    if (data.folder === true) {
         node.addClass('nfolder');}
+    if (data.read === false) {
+        say(data.read);
+        node.addClass('unread');}
 
-    $('.nodelist').append(node);
+    // insert node into nodelist in order of node_id
+    let nodelist = $('.nodelist');
+    let nodes = nodelist.children().not('.sample');
+    if (nodes.length === 0) {
+        nodelist.append(node);
+    }
+    else {
+        let last_node = nodes.last();
+        let last_node_id = last_node.find('.node_id').html();
+        if (data.node_id > last_node_id) {
+            nodelist.append(node);
+        }
+        else {
+            nodes.each(function() {
+                let node_id = $(this).find('.node_id').html();
+                if (data.node_id < node_id) {
+                    $(this).before(node);
+                    return false;
+                }
+            });
+        }
+    }
 }
 
 
@@ -187,9 +216,6 @@ function add_member() {
 }
 
 
-
-
-
 function send_message() {
     const message = $('#new_message_line').val();
     const base_id = $('.selected .node_id').html();
@@ -214,6 +240,12 @@ function send_message() {
     });
 }
 
+function home_clicked() {
+    $('.folder').removeClass('selected');
+    pathline.html('/');
+    get_nodes(0);
+}
+
 
 // prevent default form submission
 $('.genericForm').submit(function(event) {
@@ -221,12 +253,11 @@ $('.genericForm').submit(function(event) {
 });
 
 
-
 // Event Listeners
 $('#new_folder_line').blur(add_folder);
 $('#add_member_line').blur(add_member);
 $('#send_message_button').click(send_message);
-// $('#homediv').click(home_clicked);
+$('#homediv').click(home_clicked);
 
 
 get_folders();
