@@ -251,6 +251,7 @@ function send_message() {
     });
 }
 
+
 function clear_folder_selection() {
     $('.folder').removeClass('selected');
     pathline.html('/');

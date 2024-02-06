@@ -1,17 +1,15 @@
 :root {
     --user_color: rgb(52 58 66);
-    --sent_color: rgb(255 230 210);
-    /* --list_back_color: rgb(247 243 236); */
-    /* --list_back_color: rgb(243, 241, 237); */
-    --list_back_color: rgb(255 248 236);
-
-    --unread_color: rgb(255, 207, 123);
-
+    --sent_color: rgb(216 215 215);
+    --list_back_color: rgb(255 255 255);
+    --unread_color: #9ee2d7;
+    --selected_color: #ffdca0;
+    --nodefolder_color: #efc085;
 }
 
 body {
     font-family: Roboto, sans-serif;
-    background-color: rgb(255 242 220);
+    background-color: rgb(255 248 237);
 }
 
 
@@ -49,6 +47,7 @@ body {
 .itemlist {
     flex-grow: 1;
     margin-top: .5rem;
+    overflow: auto;
 }
 
 .itemlist p {
@@ -69,7 +68,7 @@ body {
 }
 
 .listitem.selected {
-    background-color: orange;
+    background-color: var(--selected_color);
 }
 
 .entrysection {
@@ -160,7 +159,7 @@ body {
 
 .node.nfolder {
     margin: 0 10rem;
-    background-color: wheat;
+    background-color: var(--nodefolder_color);
 }
 
 .node.unread {
