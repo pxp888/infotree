@@ -50,7 +50,15 @@ function draw_node(data) {
     let read_index = data.members.indexOf(username);
     let node_read = data.read[read_index];
     if (node_read === false) {
-        node.addClass('unread');}
+        node.addClass('unread');
+        data = {
+            'action': 'mark_read',
+            'node_id': data.node_id,
+        }
+        ajaxPost(data, function(response) {
+            say('mark_read', response);
+        });
+    }
     
     // insert node into nodelist in order of node_id
     let nodelist = $('.nodelist');
@@ -75,13 +83,7 @@ function draw_node(data) {
         }
     }
 
-    data = {
-        'action': 'mark_read',
-        'node_id': data.node_id,
-    }
-    ajaxPost(data, function(response) {
-        say('mark_read', response);
-    });
+    
 }
 
 
@@ -267,7 +269,7 @@ $('#new_folder_line').blur(add_folder);
 $('#add_member_line').blur(add_member);
 $('#send_message_button').click(send_message);
 $('#homediv').click(clear_folder_selection);
-$('.folderlist').click(clear_folder_selection);
+// $('.folderlist').click(clear_folder_selection);
 
 
 get_folders();
