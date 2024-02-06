@@ -14,13 +14,16 @@ body {
 }
 
 
-.hiddenform, .hidden {
+.hidden {
     display: none;
     color: blue;
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
+.sample {
+    display: none;
+}
 
 
 .mains {
@@ -32,30 +35,62 @@ body {
 .mainsection {
     display: flex;
     flex-direction: column;
+    margin: 0 .5rem;
 }
-
 
 .mainsection h2{
     border-bottom: 1px solid var(--user_color);
-    margin-right: 2rem;
+    margin: 0 2rem 0 0;
     padding: .5rem;
 }
 
+
 .itemlist {
     flex-grow: 1;
+    margin-top: .5rem;
+}
+
+.itemlist p {
+    margin: 0;
+}
+
+.itemlist .members {
+    font-size: 14px;
+    color: var(--user_color);
 }
 
 .listitem {
     border: 1px solid var(--user_color);
     border-radius: .5rem;
     padding: .5rem;
+    margin: .2rem;
+    background-color: var(--list_back_color);
 }
 
+.listitem.selected {
+    background-color: orange;
+}
 
 .entrysection {
-    height: 100px;
+    border-top: 1px solid var(--user_color);
+    height: 140px;
 }
 
+
+
+.genericForm {
+    display: flex;
+    flex-direction: column;
+    margin: .5rem;
+}
+
+.genericForm textarea {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+
+/* Browser Specific Items */
 
 
 .location_bar {
@@ -73,16 +108,30 @@ body {
     grid-column-end: 3;
 }
 
-
-
-.genericForm {
-    display: flex;
-    flex-direction: column;
-    margin: .5rem;
+.browse_button {
+    cursor: pointer;
+    border: 1px solid var(--user_color);
+    padding: .25rem;
+    border-radius: .5rem;
+    margin-top: .5rem;
 }
 
-.genericForm textarea {
-    grid-column-start: 1;
-    grid-column-end: 3;
+
+/* Viewer Specific Items */
+
+
+.message {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.created_on {
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    color: var(--user_color);
+    justify-self: right;
+
+    grid-column-start: 2;
+
 }
 

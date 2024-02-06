@@ -18,8 +18,8 @@
     align-items: baseline;
 }
 
-#top .top_username {
-    margin: 12px 0;
+#top .username {
+    margin: 12px 10px;
 }
 
 #top ul {
