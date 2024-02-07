@@ -42,7 +42,7 @@ def send_node(node_id):
         'action': 'send_node',
         'path': node.path,
         'node_id': int(node.id),
-        'base_id': int(node.base.id) if node.base else 0,
+        'base_id': int(node.base.id) if node.base else -1,
         'content': node.content,
         'folder': node.folder,
         'created_on': node.created_on.strftime('%b %d, %Y, %I:%M %p'),
@@ -147,7 +147,46 @@ def add_member(request):
     return send_node(node_id)
 
 
+def send_message(request):
+    user = request.user
+    content = request.POST.get('content')
+    base_id = request.POST.get('base_id')
 
+    base = Node.objects.get(id=base_id)
+    node = Node.objects.create(author=user, content=content, base=base)
+    node.save()
+    
+    targets = Target.objects.filter(node=base)
+    users = []
+    for target in targets:
+        user = target.user
+        if user != request.user:
+            new_target = Target.objects.create(node=node, user=user, read=False)
+        else:
+            new_target = Target.objects.create(node=node, user=user, read=True)
+        new_target.save()
+    return send_node(node.id)
+
+
+def get_nodes(request):
+    user = request.user
+    base_id = request.POST.get('base_id')
+
+    targets = Target.objects.filter(user=user, node__base__id=base_id)
+    nodes = []
+    for target in targets:
+        nodes.append(target.node.id)
+
+    response = {
+        'action': 'get_nodes',
+        'nodes': nodes,
+    }
+    return JsonResponse(response)
+
+
+def get_node(request):
+    node_id = request.POST.get('node_id')
+    return send_node(node_id)
 
 
 funcs['add_root_folder'] = add_root_folder
@@ -156,6 +195,9 @@ funcs['get_folder'] = get_folder
 funcs['delete_folder'] = delete_folder
 funcs['add_member'] = add_member
 funcs['add_subfolder'] = add_subfolder
+funcs['send_message'] = send_message
+funcs['get_nodes'] = get_nodes
+funcs['get_node'] = get_node
 
 
 
