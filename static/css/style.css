@@ -115,6 +115,15 @@ body {
     
 }
 
+#new_message_line {
+    min-height: 5rem;
+}
+
+#nodelist {
+    background-color: #252526;
+    color: white;
+}
+
 
 /* FOOTER ITEMS -------------------------------------------------- */
 

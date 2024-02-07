@@ -19,9 +19,9 @@ class Node(models.Model):
 
     def __str__(self):
         if self.folder:
-            return 'folder : ' + str(self.base) + ' - ' + str(self.id) + ' - ' + str(self.path)
+            return 'folder : ' + str(self.id) + ' - ' + str(self.path)
         else:
-            return 'node : ' + str(self.base) + ' - ' + str(self.id) + ' - ' + str(self.path)
+            return 'node : ' + str(self.id) + ' - ' + str(self.path)
 
 
 class Target(models.Model):
