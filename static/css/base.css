@@ -3,13 +3,16 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
+    background-color: rgb(96, 96, 129);
+    color: rgb(255, 255, 255);
 }
 
 #top .logo {
     text-decoration: none;
     font-size: 2em;
     font-weight: bold;
-    color: black;
+    color: rgb(255, 255, 255);
+    margin-top:12px;
 }
 
 #top div {
@@ -33,7 +36,7 @@
 
 #top a {
     text-decoration: none;
-    color: black;
+    color: rgb(255, 255, 255);
     margin: 0 10px;
 }
 

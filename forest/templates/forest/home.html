@@ -7,45 +7,44 @@
 
 
 {% block content %}
-    <p id="msg_line">{{ msg }}</p>
-
     <div class="mains">
-        <div class="browser mainsection">
-            <h2>Browser</h2>
+        <div class="mainsection" id="browser">
 
-            <div class="location_bar">
-                <div id="homediv" class="browse_button"><p>Home</p></div>
-                <div class="hidden"><p id="pathline">/</p></div>
-            </div>
+            <form action="POST" class="genericLineForm" id="create_group_form">
+                {% csrf_token %}
+                <!-- <label for="new_folder_line">Create Group:</label> -->
+                <input type="text" id="new_folder_line" placeholder="Start New Group">
+            </form>
 
-            <div class="itemlist folderlist">
+            <div class="itemlist" id="folderlist">
                 <div class="listitem folder sample">
                     <p class="path hidden"></p>
                     <p class="name">name</p>
                     <p class="members">Bob, Alice</p>
-                    <p class="node_id hidden">-1</p>
-                    <p class="base_id hidden">-2</p>
-                    <div class="kids">
-
-                    </div>
+                    <p class="node_id">-1</p>
+                    <p class="base_id">-2</p>
+                    <div class="kids"></div>
                 </div>
             </div>
 
-            <div class="entrysection">
-                <form action="POST" class="genericForm">
+            <div id="group_edit">
+                <form action="POST" class="genericLineForm">
                     {% csrf_token %}
-                    <label for="new_folder_line">Create Folder:</label>
-                    <input type="text" id="new_folder_line">
-                    <label for="add_member_line">Add Member:</label>
-                    <input type="text" id="add_member_line">
-                    <p class="remove_folder_button">Remove Folder</p>
+                    <input type="text" id="add_member_line" placeholder="Add Group Member">
+                    <input type="text" id="sub_folder_line" placeholder="Create Sub-Group">
+                    <!-- add button -->
+                    <button type="submit" id="delete_group_button">Delete Group</button>
                 </form>
             </div>
+
         </div>
 
-        <div class="viewer mainsection">
-            <h2>Messages</h2>
-            <div class="itemlist nodelist">
+        <div class="mainsection" id="viewer">
+            <div id="viewheader">
+                <h2 id="view_title">Messages</h2>
+                <hr>
+            </div>
+            <div class="itemlist" id="nodelist">
                 <div class="listitem node sample">
                     <p class="base_id hidden">-2</p>
                     <p class="author hidden">Yomama</p>
@@ -56,21 +55,17 @@
                 </div>
             </div>
             <div class="entrysection">
-                <form action="POST" class="genericForm">
+                <form action="POST" class="genericLineForm">
                     {% csrf_token %}
-                    <label for="new_message_line">Message:</label>
-                    <input type="text" id="new_message_line">
-                    <label for="send_message_button">Send Message</label>
-                    <input type="submit" value="Send" id="send_message_button">
+                    <input type="text" id="new_message_line" placeholder="message ...">
+                    <button type="submit" id="send_message_button">Send Message</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <div id="data_block" class="hidden">
-        <div class="folders">
-
-        </div>
+    
+    <div id="foot">
+        <p id="msg_line">{{ msg }}Hello there.</p>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
