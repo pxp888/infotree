@@ -18,16 +18,19 @@ class Node(models.Model):
         ordering = ['created_on']
 
     def __str__(self):
-        return 'node : ' + str(self.path) + '/' + str(self.id) + ' - ' + str(self.folder)
+        if self.folder:
+            return 'folder : ' + str(self.base) + ' - ' + str(self.id) + ' - ' + str(self.path)
+        else:
+            return 'node : ' + str(self.base) + ' - ' + str(self.id) + ' - ' + str(self.path)
 
 
 class Target(models.Model):
     id = models.AutoField(primary_key=True)
-    node = models.ForeignKey(Node, on_delete=models.CASCADE)
-    target = models.ForeignKey(User, on_delete=models.CASCADE)
+    node = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='targets')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='targets')
     read = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'path : ' + self.target.username + '/' + str(self.node.path) + '/' + str(self.node.id)
+        return 'path : ' + self.user.username + '/' + str(self.node.path) + '/' + str(self.node.id)
 
 

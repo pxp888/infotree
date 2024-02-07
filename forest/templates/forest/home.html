@@ -18,22 +18,21 @@
 
             <div class="itemlist" id="folderlist">
                 <div class="listitem folder sample">
-                    <p class="path hidden"></p>
-                    <p class="name">name</p>
+                    <div class="name">name</div>
                     <p class="members">Bob, Alice</p>
-                    <p class="node_id">-1</p>
-                    <p class="base_id">-2</p>
+                    <p class="path hidden">path</p>
+                    <p class="node_id ">-1</p>
+                    <p class="base_id hidden">-2</p>
                     <div class="kids"></div>
                 </div>
             </div>
 
-            <div id="group_edit">
+            <div id="group_editor" class="show">
                 <form action="POST" class="genericLineForm">
                     {% csrf_token %}
                     <input type="text" id="add_member_line" placeholder="Add Group Member">
                     <input type="text" id="sub_folder_line" placeholder="Create Sub-Group">
-                    <!-- add button -->
-                    <button type="submit" id="delete_group_button">Delete Group</button>
+                    <button type="button" id="delete_folder_button">Delete Group</button>
                 </form>
             </div>
 
@@ -58,7 +57,7 @@
                 <form action="POST" class="genericLineForm">
                     {% csrf_token %}
                     <input type="text" id="new_message_line" placeholder="message ...">
-                    <button type="submit" id="send_message_button">Send Message</button>
+                    <button type="button" id="send_message_button">Send Message</button>
                 </form>
             </div>
         </div>
