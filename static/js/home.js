@@ -135,25 +135,27 @@ function draw_node(data) {
         node.addClass('sent_message');
     }
 
-    let nodelist = $('#nodelist');
-    let nodes = nodelist.children().not('.sample');
-    if (nodes.length === 0) {
-        nodelist.append(node);
-    }
-    else {
-        let last_node = nodes.last();
-        let last_node_id = last_node.find('.node_id').html();
-        if (data.node_id > last_node_id) {
+    if (new_node) {
+        let nodelist = $('#nodelist');
+        let nodes = nodelist.children().not('.sample');
+        if (nodes.length === 0) {
             nodelist.append(node);
         }
         else {
-            nodes.each(function() {
-                let node_id = $(this).find('.node_id').html();
-                if (data.node_id < node_id) {
-                    $(this).before(node);
-                    return false;
-                }
-            });
+            let last_node = nodes.last();
+            let last_node_id = last_node.find('.node_id').html();
+            if (data.node_id > last_node_id) {
+                nodelist.append(node);
+            }
+            else {
+                nodes.each(function() {
+                    let node_id = $(this).find('.node_id').html();
+                    if (data.node_id < node_id) {
+                        $(this).before(node);
+                        return false;
+                    }
+                });
+            }
         }
     }
 }
@@ -293,6 +295,15 @@ function send_message() {
 }
 
 
+function update() {
+    let node_id = $('.selected').find('.node_id').html();
+    ajaxPost({
+        action: 'update',
+        node_id: node_id,
+    }, function(response) {
+        say('update:', response);
+    });
+}
 
 
 // prevent default form submission
@@ -325,3 +336,6 @@ $('#send_message_button').click(send_message);
 
 
 get_folders();
+
+setInterval(update, 3000);
+

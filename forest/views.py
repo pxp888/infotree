@@ -189,6 +189,30 @@ def get_node(request):
     return send_node(node_id)
 
 
+def update(request):
+    user = request.user
+    node_id = request.POST.get('node_id')
+
+    nodes = []
+    folders = []
+
+    targets = Target.objects.filter(user=user, read=False, node__folder=True)
+    for target in targets:
+        folders.append(target.node.id)
+    
+    targets = Target.objects.filter(user=user, node__base__id=node_id, read=False)
+    for target in targets:
+        nodes.append(target.node.id)
+
+    response = {
+        'action': 'update',
+        'nodes': nodes,
+        'folders': folders,
+    }
+    return JsonResponse(response)
+
+
+
 funcs['add_root_folder'] = add_root_folder
 funcs['get_folders'] = get_folders
 funcs['get_folder'] = get_folder
@@ -198,6 +222,7 @@ funcs['add_subfolder'] = add_subfolder
 funcs['send_message'] = send_message
 funcs['get_nodes'] = get_nodes
 funcs['get_node'] = get_node
+funcs['update'] = update
 
 
 
