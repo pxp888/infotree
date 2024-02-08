@@ -5,6 +5,9 @@
     align-items: baseline;
     background-color: rgb(96, 96, 129);
     color: rgb(255, 255, 255);
+
+    grid-column-start: 1;
+    grid-column-end: 3;
 }
 
 #top .logo {

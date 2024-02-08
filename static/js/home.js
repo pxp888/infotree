@@ -78,6 +78,15 @@ function order_folders() {
 
 // ajax functions
 
+function mark_read(node_id) {
+    ajaxPost({
+        action: 'mark_read',
+        node_id: node_id,
+    }, function(response) {
+        say(response);
+    });
+}
+
 
 function draw_folder(data) {
     let folder;
@@ -120,7 +129,7 @@ function draw_node(data) {
         node = $('.node.sample').clone();
         node.removeClass('sample');
     }
-
+    
     members = data.members.filter(m => m !== data.author);
     members = data.author + ': ' + members.join(', ');
 
@@ -130,6 +139,16 @@ function draw_node(data) {
     node.find('.author').html(data.author);
     node.find('.created_on').html(data.created_on);
     node.find('.members').html(members);
+
+    let read = true;
+    for (let i = 0; i < data.members.length; i++) {
+        let member = data.members[i];
+        if (member === username) {
+            read = data.read[i];
+            break;
+        }
+    }
+    if (read === false) { node.addClass('unread'); }
 
     if (data.author === username) {
         node.addClass('sent_message');
@@ -158,6 +177,8 @@ function draw_node(data) {
             }
         }
     }
+
+    mark_read(data.node_id);
 }
 
 
@@ -301,7 +322,12 @@ function update() {
         action: 'update',
         node_id: node_id,
     }, function(response) {
-        say('update:', response);
+        for (let i = 0; i < response.folders.length; i++) {
+            get_folder(response.folders[i]);
+        }
+        for (let i = 0; i < response.nodes.length; i++) {
+            get_node(response.nodes[i]);
+        }
     });
 }
 

@@ -11,11 +11,8 @@ body {
     font-family: Roboto, sans-serif;
     
     margin: 0;
-
-    height: 100vh;
-    display: grid;
-    grid-template-rows: 60px 1fr 40px;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
 }
 
 .hidden {
@@ -32,11 +29,14 @@ body {
 .mains {
     display: grid;
     grid-template-columns: 400px 1fr;
-    overflow-x: auto;
 }
 
 .mainsection {
+    height: calc(100vh - 80px);
     min-width: 400px;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .genericForm {
@@ -58,7 +58,7 @@ body {
 
 .itemlist {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 .listitem {
@@ -77,9 +77,7 @@ body {
     flex-direction: column;
 }
 
-#folderlist {
-    flex-grow: 1;
-}
+
 
 .folder {
     display: grid;
@@ -147,6 +145,10 @@ body {
     justify-self: right;
 }
 
+.node.unread {
+    background-color: var(--unread_color);
+}
+
 /* FOOTER ITEMS -------------------------------------------------- */
 
 
@@ -158,5 +160,5 @@ body {
 }
 
 #foot p {
-    margin: 10px 0;
+    margin: 0 0;
 }

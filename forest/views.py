@@ -212,6 +212,27 @@ def update(request):
     return JsonResponse(response)
 
 
+def mark_read(request):
+    user = request.user
+    node_id = request.POST.get('node_id')
+
+    try:
+        target = Target.objects.get(user=user, node__id=node_id)
+        target.read = True
+        target.save()
+    except Target.DoesNotExist:
+        response = {
+            'action': 'mark_read',
+            'read': False,
+        }
+        return JsonResponse(response)
+
+    response = {
+        'action': 'mark_read',
+        'read': True,
+    }
+    return JsonResponse(response)
+
 
 funcs['add_root_folder'] = add_root_folder
 funcs['get_folders'] = get_folders
@@ -223,6 +244,8 @@ funcs['send_message'] = send_message
 funcs['get_nodes'] = get_nodes
 funcs['get_node'] = get_node
 funcs['update'] = update
+funcs['mark_read'] = mark_read
+
 
 
 
