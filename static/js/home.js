@@ -83,7 +83,7 @@ function mark_read(node_id) {
         action: 'mark_read',
         node_id: node_id,
     }, function(response) {
-        say(response);
+        
     });
 }
 
@@ -100,8 +100,13 @@ function draw_folder(data) {
         folder = $('.folder.sample').clone();
         folder.removeClass('sample');
     }
-    
+
     let name = data.path.split('/').pop();
+
+    let read = true;
+    let index = data.members.indexOf(username);
+    read = data.read[index];
+    if (!read) { folder.addClass('unread'); }
 
     folder.find('.name').html(name);
     folder.find('.node_id').html(data.node_id);
@@ -109,11 +114,13 @@ function draw_folder(data) {
     folder.find('.path').html(data.path);
     folder.find('.members').html(data.members.join(', '));
 
+    
     if (new_folder) {
         folder.click(folder_clicked);
         $('#folderlist').append(folder);
     }
     order_folders();
+    mark_read(data.node_id);
 }
 
 
@@ -141,14 +148,9 @@ function draw_node(data) {
     node.find('.members').html(members);
 
     let read = true;
-    for (let i = 0; i < data.members.length; i++) {
-        let member = data.members[i];
-        if (member === username) {
-            read = data.read[i];
-            break;
-        }
-    }
-    if (read === false) { node.addClass('unread'); }
+    let index = data.members.indexOf(username);
+    read = data.read[index];
+    if (!read) { node.addClass('unread'); }
 
     if (data.author === username) {
         node.addClass('sent_message');
@@ -177,7 +179,8 @@ function draw_node(data) {
             }
         }
     }
-
+    
+    $('#nodelist').scrollTop($('#nodelist')[0].scrollHeight);
     mark_read(data.node_id);
 }
 
@@ -322,11 +325,14 @@ function update() {
         action: 'update',
         node_id: node_id,
     }, function(response) {
-        for (let i = 0; i < response.folders.length; i++) {
-            get_folder(response.folders[i]);
+        let folders = response.folders;
+        for (let i = 0; i < folders.length; i++) {
+            get_folder(folders[i]);
         }
-        for (let i = 0; i < response.nodes.length; i++) {
-            get_node(response.nodes[i]);
+
+        let selected = $('.folder.selected');
+        if (selected.length > 0) {
+            get_nodes(selected.find('.node_id').html());
         }
     });
 }

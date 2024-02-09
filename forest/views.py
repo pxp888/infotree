@@ -191,18 +191,14 @@ def get_node(request):
 
 def update(request):
     user = request.user
-    node_id = request.POST.get('node_id')
 
     nodes = []
     folders = []
 
-    targets = Target.objects.filter(user=user, read=False, node__folder=True)
-    for target in targets:
-        folders.append(target.node.id)
-    
-    targets = Target.objects.filter(user=user, node__base__id=node_id, read=False)
+    targets = Target.objects.filter(user=user, read=False, node__folder=False)
     for target in targets:
         nodes.append(target.node.id)
+        folders.append(target.node.base.id)
 
     response = {
         'action': 'update',

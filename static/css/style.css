@@ -69,6 +69,8 @@ body {
     margin: 0;
 }
 
+
+
 /* BROWSER ITEMS -------------------------------------------------- */
 
 #browser {
@@ -97,6 +99,11 @@ body {
     background-color: var(--selected_color);
 }
 
+.folder.unread {
+    border: 8px solid var(--unread_color);
+}
+
+
 
 /* VIEWER ITEMS -------------------------------------------------- */
 
@@ -118,7 +125,7 @@ body {
 }
 
 #nodelist {
-    background-color: #252526;
+    background-color: #535356;
     color: white;
 }
 
@@ -130,10 +137,16 @@ body {
     background-color: var(--list_back_color);
     border: 1px solid var(--user_color);
     color: black;
+
+    margin: 1px 50px 1px 5px;
+    
+    padding: 5px;
+    border-radius: 16px;
 }
 
 .node.sent_message {
     background-color: var(--sent_color);
+    margin: 1px 5px 1px 50px;
 }
 
 .node .content {
@@ -146,7 +159,7 @@ body {
 }
 
 .node.unread {
-    background-color: var(--unread_color);
+    border: 8px solid var(--unread_color);
 }
 
 /* FOOTER ITEMS -------------------------------------------------- */
