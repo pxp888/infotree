@@ -326,7 +326,8 @@ function update() {
         let selected = $('.selected.folder').find('.node_id').html();
         $('.folder').not('.sample').removeClass('unread');
         for (let i = 0; i < nodes.length; i++) {
-            if (folders[i]===selected) {
+            say(folders[i], selected);
+            if (parseInt(folders[i])===parseInt(selected)) {
                 get_node(nodes[i]);
             }
             find_folder(folders[i]).addClass('unread');

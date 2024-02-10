@@ -160,9 +160,10 @@ def send_message(request):
     users = []
     for target in targets:
         user = target.user
+        cache.delete(user.username)
+        print('cleared cache for', user.username)
         if user != request.user:
             new_target = Target.objects.create(node=node, user=user, read=False)
-            cache.delete(user.username)
         else:
             new_target = Target.objects.create(node=node, user=user, read=True)
         new_target.save()
@@ -194,6 +195,7 @@ def update(request):
     user = request.user
 
     if cache.get(user.username) is not None:
+        print('cache hit', user.username)
         return cache.get(user.username)
     else:
         nodes = []
