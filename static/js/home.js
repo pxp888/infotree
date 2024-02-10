@@ -21,10 +21,12 @@ function ajaxPost(data, successfunc) {
 
 
 function find_object(node_id, type) {
+    if (node_id === undefined) { return null; }
     let objects = $(type);
     let oid;
     for (let i = 0; i < objects.length; i++) {
         oid = objects.eq(i).find('.node_id').html();
+        if (oid === undefined) { continue; }
         if (oid === node_id.toString()) {
             return objects.eq(i);
         }
@@ -71,7 +73,7 @@ function order_folders() {
         base.after(folder);
 
         let level = folder.find('.path').html().split('/').length;
-        folder.css('margin-left', (level-1)*10+'px');
+        folder.css('margin-left', (level-1)*18+'px');
         folder.addClass('subfolder');
     }
 }
@@ -142,6 +144,15 @@ function draw_node(data) {
     node.find('.author').html(data.author);
     node.find('.created_on').html(data.created_on);
     node.find('.members').html(members);
+
+    if(data.folder===true) {
+        node.addClass('subfolder');
+        node.click(folder_clicked);
+        let name = data.path.split('/').pop();
+        node.find('.content').html('subgroup : ' + name);
+
+    }
+
 
     let read = true;
     let index = data.members.indexOf(username);
@@ -245,7 +256,7 @@ function add_root_folder() {
 function delete_folder() {
     let node_id = $('.selected').find('.node_id').html();
     if (node_id === '') { return; }
-    let ok = confirm('Are you sure you want to delete this group?');
+    let ok = confirm('Are you sure you want to leave this group?');
     if (!ok) { return; }
 
     ajaxPost({

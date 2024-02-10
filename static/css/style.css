@@ -186,8 +186,12 @@ body {
 }
 
 .node.unread {
-    /* border: 8px solid var(--unread_color); */
     background-color: var(--unread_color);
+}
+
+.node.subfolder {
+    margin: 10px 75px 10px 75px;
+    background-color: wheat;
 }
 
 /* FOOTER ITEMS -------------------------------------------------- */
