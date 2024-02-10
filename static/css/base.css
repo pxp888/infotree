@@ -120,6 +120,11 @@ button:hover {
     height: 30px;
 }
 
+.genericLineForm textarea {
+    font-family: 'Roboto';
+    font-size: 1rem;
+}
+
 
 @media screen and (max-width: 800px)
 {
