@@ -103,11 +103,6 @@ function draw_folder(data) {
 
     let name = data.path.split('/').pop();
 
-    let read = true;
-    let index = data.members.indexOf(username);
-    read = data.read[index];
-    if (!read) { folder.addClass('unread'); }
-
     folder.find('.name').html(name);
     folder.find('.node_id').html(data.node_id);
     folder.find('.base_id').html(data.base_id);
@@ -325,17 +320,20 @@ function update() {
         action: 'update',
         node_id: node_id,
     }, function(response) {
+        let nodes = response.nodes;
         let folders = response.folders;
-        for (let i = 0; i < folders.length; i++) {
-            get_folder(folders[i]);
+        let selected = $('.selected.folder').find('.node_id').html();
+        $('.folder').not('.sample').removeClass('unread');
+        for (let i = 0; i < nodes.length; i++) {
+            if (folders[i]===selected) {
+                get_node(nodes[i]);
+            }
+            find_folder(folders[i]).addClass('unread');
         }
+    }
+)};
 
-        let selected = $('.folder.selected');
-        if (selected.length > 0) {
-            get_nodes(selected.find('.node_id').html());
-        }
-    });
-}
+
 
 
 // prevent default form submission
