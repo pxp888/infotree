@@ -132,9 +132,19 @@ def add_member(request):
     member = request.POST.get('member')
 
     try:
+        targetuser = User.objects.get(username=member)
+    except User.DoesNotExist:
+        response = {
+            'action': 'add_member_error',
+            'added': False,
+            'reason': 'user does not exist',
+        }
+        return JsonResponse(response)
+
+    try:
         target = Target.objects.get(node__id=node_id, user__username=member)
         response = {
-            'action': 'add_member',
+            'action': 'add_member_error',
             'added': False,
             'reason': 'already a member',
         }

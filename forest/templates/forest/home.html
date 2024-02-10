@@ -13,7 +13,6 @@
 
             <form action="POST" class="genericLineForm" id="create_group_form">
                 {% csrf_token %}
-                <!-- <label for="new_folder_line">Create Group:</label> -->
                 <input type="text" id="new_folder_line" placeholder="Start New Group">
             </form>
 
@@ -42,9 +41,6 @@
         </div>
 
         <div class="mainsection" id="viewer">
-            <!-- <div id="viewheader">
-                <h2 id="view_title">Messages</h2>
-            </div> -->
             <div class="itemlist" id="nodelist">
                 <div class="listitem node sample">
                     <p class="node_id hidden">-1</p>
@@ -66,7 +62,7 @@
     </div>
     
     <div id="foot">
-        <p id="msg_line">{{ msg }}Hello there.</p>
+        <p id="msg_line">{{ msg }}</p>
     </div>
 
     

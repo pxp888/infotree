@@ -107,7 +107,6 @@ body {
 
 
 #group_editor {
-    /* padding: 5px; */
     background-color: var(--selected_color);
 }
 

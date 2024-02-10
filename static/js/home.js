@@ -56,7 +56,6 @@ function select_folder(node_id) {
 
 
 function folder_clicked(event) {
-    say(event.target);
     let folder = $(event.target).closest('.folder');
     let node_id = folder.find('.node_id').html();
     select_folder(node_id);
@@ -87,7 +86,7 @@ function mark_read(node_id) {
         action: 'mark_read',
         node_id: node_id,
     }, function(response) {
-        
+
     });
 }
 
@@ -96,7 +95,7 @@ function draw_folder(data) {
     let folder;
     let new_folder=true;
     let old = find_folder(data.node_id);
-    if (old) { 
+    if (old) {
         folder = old;
         new_folder = false;
     }
@@ -141,7 +140,7 @@ function draw_node(data) {
         node = $('.node.sample').clone();
         node.removeClass('sample');
     }
-    
+
     members = data.members.filter(m => m !== data.author);
     members = data.author + ': ' + members.join(', ');
 
@@ -191,7 +190,7 @@ function draw_node(data) {
             }
         }
     }
-    
+
     $('#nodelist').scrollTop($('#nodelist')[0].scrollHeight);
     mark_read(data.node_id);
 }
@@ -250,8 +249,8 @@ function add_root_folder() {
         'action': 'add_root_folder',
         'path': folder_name,
     }
-    ajaxPost(data, function(response) { 
-        draw_folder(response); 
+    ajaxPost(data, function(response) {
+        draw_folder(response);
         $('#new_folder_line').val('');
         select_folder(response.node_id);
     });
@@ -272,11 +271,16 @@ function delete_folder() {
         folder.remove();
         $('#group_editor').addClass('hidden');
     });
+
+    location.reload();
 }
 
 
 function add_member() {
     let node_id = $('.selected').find('.node_id').html();
+    if (node_id === undefined) {
+        alert('Please select a group to add a member to.');
+        return; }
     let member = $('#add_member_line').val();
     if (member === '') { return; }
 
@@ -285,16 +289,26 @@ function add_member() {
         node_id: node_id,
         member: member,
     }, function(response) {
-        get_folder(node_id);
-        $('#add_member_line').val('');
-        select_folder(node_id);
-    });
+        if (response.action === 'add_member_error') {
+            alert(response.reason);
+            return;
+        }
 
+        if (response.action === 'send_node') {
+            get_folder(node_id);
+            $('#add_member_line').val('');
+            select_folder(node_id);
+        }
+    });
 }
 
 
 function add_subfolder() {
     let base_id = $('.selected').find('.node_id').html();
+    if (base_id === undefined) {
+        alert('Please select a group to add a subgroup to.');
+        return;
+    }
     let folder_name = $('#sub_folder_line').val();
     if (folder_name === '') { return; }
 
@@ -306,17 +320,19 @@ function add_subfolder() {
         path: path,
     }, function(response) {
         get_folders();
+        $('#sub_folder_line').val('');
+        select_folder(response.node_id);
     });
 }
 
 
 function send_message() {
     let message = $('#new_message_line').val();
-    if (message === '') { 
+    if (message === '') {
         alert('Please enter a message to send');
         return; }
     base_id = $('.selected').find('.node_id').html();
-    if (base_id === undefined) { 
+    if (base_id === undefined) {
         alert('Please select a group to send the message to.');
         return; }
 

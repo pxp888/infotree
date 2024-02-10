@@ -9,11 +9,11 @@ tree based messaging
 *   User Directory Page 
 *   View by User page
 *   Heroku Deployment
+*   Error handling
 
 
 ### Maybe todo list
 *   Message read status display
-*   folders show unread count
 
 
 
