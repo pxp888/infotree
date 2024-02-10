@@ -249,6 +249,14 @@ function get_nodes(base_id) {
 function add_root_folder() {
     const folder_name = $('#new_folder_line').val();
     if (folder_name === '') { return; }
+    
+    let folders = $('.folder').not('.sample').find('.name');
+    for (let i = 0; i < folders.length; i++) {
+        if (folders.eq(i).html() === folder_name) {
+            select_folder(folders.eq(i).closest('.folder').find('.node_id').html());
+            return;
+        }
+    }
 
     data = {
         'action': 'add_root_folder',
