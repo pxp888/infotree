@@ -162,6 +162,7 @@ def send_message(request):
         user = target.user
         if user != request.user:
             new_target = Target.objects.create(node=node, user=user, read=False)
+            cache.delete(user.username)
         else:
             new_target = Target.objects.create(node=node, user=user, read=True)
         new_target.save()
@@ -192,26 +193,29 @@ def get_node(request):
 def update(request):
     user = request.user
 
-    nodes = []
-    folders = []
+    if cache.get(user.username) is not None:
+        return cache.get(user.username)
+    else:
+        nodes = []
+        folders = []
+        targets = Target.objects.filter(user=user, read=False, node__folder=False)
+        for target in targets:
+            nodes.append(target.node.id)
+            folders.append(target.node.base.id)
 
-    targets = Target.objects.filter(user=user, read=False, node__folder=False)
-    for target in targets:
-        nodes.append(target.node.id)
-        folders.append(target.node.base.id)
-
-    response = {
-        'action': 'update',
-        'nodes': nodes,
-        'folders': folders,
-    }
-    return JsonResponse(response)
+        response = {
+            'action': 'update',
+            'nodes': nodes,
+            'folders': folders,
+        }
+        cache.set(user.username, JsonResponse(response), 600)
+        return JsonResponse(response)
 
 
 def mark_read(request):
     user = request.user
     node_id = request.POST.get('node_id')
-
+    cache.delete(user.username)
     try:
         target = Target.objects.get(user=user, node__id=node_id)
         target.read = True
