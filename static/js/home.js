@@ -12,9 +12,14 @@ function ajaxPost(data, successfunc) {
         url: '/',
         data: data,
         headers: { 'X-CSRFToken': csrfToken, },
-        success: successfunc,
+        success: function(response) {
+            successfunc(response);
+            $('#errorbar').addClass('hidden');
+        }
+        ,
         error: function(response) {
-            say('Error:', response);
+            $('#errorbar').removeClass('hidden');
+            $('#errorbar p').html('Error: Connection Failure');
         },
     });
 }

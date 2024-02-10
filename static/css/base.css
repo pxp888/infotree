@@ -43,3 +43,16 @@
     margin: 0 10px;
 }
 
+#errorbar {
+    background-color: #bb4949;
+    color: white;
+    padding-left: 2rem;
+    font-weight: bold;
+
+    height: 30px;
+}
+
+#errorbar p {
+    margin: 6px;
+}
+
