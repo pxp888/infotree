@@ -10,7 +10,7 @@
 {% block content %}
     <div id="errorbar" class="hidden"><p>Error: </p></div>
     <div id="mains">
-        <div id="userSection">
+        <div id="userMenu">
             <form action="POST" class="genericLineForm">
                 {% csrf_token %}
                 <input type="text" id="search" name="search" placeholder="Search">
@@ -22,15 +22,19 @@
                     </div>
                 {% endfor %}
             </div>
-
         </div>
+
         <div id="messlist">
             <div class="node sample">
+                <p class="node_id hidden">-1</p>
+                <p class="base_id hidden">-2</p>
                 <p class="author">Bob</p>
                 <p class="created_on">Today</p>
+                <p class="members">Alice</p>
                 <p class="content">Hello, World!</p>
             </div>
         </div>
+        
     </div>
     
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

@@ -23,16 +23,49 @@ function ajaxPost(data, successfunc) {
 }
 
 
-function name_clicked(event) {
-    let user = $(event.target).closest('.user');
+function draw_node(data) {
+    let node = $('.node.sample').clone()
+    node.removeClass('sample');
+
+    members = data.members.filter(m => m !== data.author);
+    members = data.author + ': ' + members.join(', ');
+
+    node.find('.node_id').html(data.node_id);
+    node.find('.base_id').html(data.base_id);
+    node.find('.content').html(data.content);
+    node.find('.author').html(data.author);
+    node.find('.created_on').html(data.created_on);
+    node.find('.members').html(members);
+
+    messlist.append(node[0]);
+}
+
+
+
+function get_node(node_id) {
     ajaxPost({ 
-        action: 'name_clicked',
-        username: user.text() 
+        action: 'get_node', 
+        node_id: node_id ,
     }, function(response) {
-        say(response);
+        draw_node(response);
     });
 }
 
+
+function name_clicked(event) {
+    let user = $(event.target).closest('.user');
+    let username = user.find('.username').text();
+    ajaxPost({ 
+        action: 'name_clicked',
+        username: username, 
+    }, function(response) {
+        if (response.action ==='name_clicked') {
+            $('.node').not('.sample').remove();
+            let nodes = response.nodes;
+            for (let i = 0; i < nodes.length; i++) { get_node(nodes[i]); }
+        }
+    });
+}
 
 
 $('.user').click(name_clicked);
