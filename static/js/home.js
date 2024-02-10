@@ -72,6 +72,7 @@ function order_folders() {
 
         let level = folder.find('.path').html().split('/').length;
         folder.css('margin-left', (level-1)*10+'px');
+        folder.addClass('subfolder');
     }
 }
 

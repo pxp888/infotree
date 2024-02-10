@@ -86,8 +86,15 @@ body {
     grid-template-columns: 1fr 1fr;
     
     background-color: var(--list_back_color);
+    padding: .5rem;
 }
 
+.folder .members {
+    justify-self: right;
+    margin-right: 1rem;
+    font-size: 13px;
+    color: var(--user_color);
+}
 
 .folder.selected {
     background-color: var(--selected_color);
@@ -103,6 +110,9 @@ body {
     border: 8px solid var(--unread_color);
 }
 
+.folder.subfolder {
+    border-radius: 10px;
+}
 
 
 /* VIEWER ITEMS -------------------------------------------------- */
@@ -140,8 +150,8 @@ body {
 
     margin: 1px 50px 1px 5px;
     
-    padding: 5px;
-    border-radius: 16px;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .node.sent_message {
@@ -156,6 +166,13 @@ body {
 
 .node .created_on {
     justify-self: right;
+    font-size: 13px;
+    color: var(--user_color)
+}
+
+.node .members {
+    font-size: 13px;
+    color: var(--user_color)
 }
 
 .node.unread {
