@@ -1,0 +1,16 @@
+.mousehint {
+    width: auto;
+    height: auto;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(216, 216, 216);
+    color: black;
+
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.mousehint.active {
+    opacity: 1;
+}
+

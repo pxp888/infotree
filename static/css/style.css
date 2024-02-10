@@ -141,7 +141,7 @@ body {
 }
 
 #new_message_line {
-    min-height: 5rem;
+    min-height: 66px;
 }
 
 #nodelist {
