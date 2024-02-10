@@ -54,17 +54,14 @@
             <div class="entrysection">
                 <form action="POST" class="genericLineForm">
                     {% csrf_token %}
-                    <input type="text" id="new_message_line" placeholder="message ...">
+                    <textarea name="new_message_line" id="new_message_line" placeholder="message ..."></textarea>
+                    <!-- <input type="text" id="new_message_line" placeholder="message ..."> -->
                     <button type="button" id="send_message_button">Send Message</button>
                 </form>
             </div>
         </div>
     </div>
     
-    <div id="foot">
-        <p id="msg_line">{{ msg }}</p>
-    </div>
-
     
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/home.js' %}"></script>
