@@ -1,3 +1,31 @@
+:root {
+    --user_color: rgb(52 58 66);
+    --sent_color: rgb(216 215 215);
+    --list_back_color: rgb(255 255 255);
+    --unread_color: #ffdca0;
+    --selected_color: #ffdca0;
+    --nodefolder_color: #efc085;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none;
+    color: blue;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.sample {
+    display: none;
+}
+
+
 #top {
     display: flex;
     flex-direction: row;
@@ -56,3 +84,58 @@
     margin: 6px;
 }
 
+
+button {
+    color: white;
+    background-color:rgb(96, 96, 129);
+    appearance: none;
+    border: none;
+    padding: 6px;
+    transition: background-color .3s;
+}
+
+button:focus {
+    background-color:rgb(155, 80, 173);
+}
+
+button:hover {
+    background-color:rgb(155, 80, 173);
+}
+
+
+.genericForm {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    padding: .5rem .5rem;
+    border: 1px solid var(--user_color);
+}
+
+.genericLineForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-grow: 0;
+}
+
+.genericLineForm input {
+    height: 30px;
+}
+
+
+@media screen and (max-width: 800px)
+{
+    #top {
+        height: 60px;
+    }
+
+    #top .logo {
+        font-size: 1.5rem;
+    }
+
+    #top ul {
+        margin: 0;
+    }
+
+    #top .username {
+        margin: 0;
+    }
+}   

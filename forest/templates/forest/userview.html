@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+    <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/userview.css' %}">
+{% endblock head %}
+
+
+{% block content %}
+    <div id="errorbar" class="hidden"><p>Error: </p></div>
+    <div id="mains">
+        <div id="userSection">
+            <form action="POST" class="genericLineForm">
+                {% csrf_token %}
+                <input type="text" id="search" name="search" placeholder="Search">
+            </form>
+            <div id="userlist">
+                {% for user in users %}
+                    <div class="user">
+                        <p class="username">{{ user }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        <div id="messlist">
+            <div class="node sample">
+                <p class="author">Bob</p>
+                <p class="created_on">Today</p>
+                <p class="content">Hello, World!</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/userview.js' %}"></script>
+{% endblock %}
+

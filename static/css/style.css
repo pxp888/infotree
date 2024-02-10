@@ -1,58 +1,17 @@
-:root {
-    --user_color: rgb(52 58 66);
-    --sent_color: rgb(216 215 215);
-    --list_back_color: rgb(255 255 255);
-    --unread_color: #ffdca0;
-    --selected_color: #ffdca0;
-    --nodefolder_color: #efc085;
-}
-
-body {
-    font-family: Roboto, sans-serif;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.hidden {
-    display: none;
-    color: blue;
-    grid-column-start: 1;
-    grid-column-end: 3;
-}
-
-.folder.sample, .listitem.node.sample {
-    display: none;
-}
-
 .mains {
     display: grid;
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: 360px 1fr;
+    /* display: flex;
+    flex-direction: row; */
+    overflow-x: auto;
 }
 
 .mainsection {
-    height: calc(100vh - 60px);
-    min-width: 400px;
+    height: calc(100svh - 60px);
+    /* min-width: 400px; */
 
     display: flex;
     flex-direction: column;
-}
-
-.genericForm {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    padding: .5rem .5rem;
-    border: 1px solid var(--user_color);
-}
-
-.genericLineForm {
-    display: grid;
-    grid-template-columns: 1fr;
-    flex-grow: 0;
-}
-
-.genericLineForm input {
-    height: 30px;
 }
 
 .itemlist {
@@ -66,23 +25,6 @@ body {
 
 .listitem p {
     margin: 0;
-}
-
-button {
-    color: white;
-    background-color:rgb(96, 96, 129);
-    appearance: none;
-    border: none;
-    padding: 6px;
-    transition: background-color .3s;
-}
-
-button:focus {
-    background-color:rgb(155, 80, 173);
-}
-
-button:hover {
-    background-color:rgb(155, 80, 173);
 }
 
 button#send_message_button:focus {
@@ -101,6 +43,9 @@ button#delete_folder_button:hover {
     background-color: #dd5c5c;
 }
 
+.folder.sample, .listitem.node.sample {
+    display: none;
+}
 
 
 /* BROWSER ITEMS -------------------------------------------------- */
@@ -160,6 +105,7 @@ button#delete_folder_button:hover {
 
 
 #viewer {
+    flex-grow: 1;
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
@@ -225,16 +171,9 @@ button#delete_folder_button:hover {
     background-color: wheat;
 }
 
-/* FOOTER ITEMS -------------------------------------------------- */
-
-
-#foot {
-    background-color: rgb(96, 96, 129);
-    color: white;
-    padding-left: 3rem;
-    margin: 0;
-}
-
-#foot p {
-    margin: 0 0;
+@media screen and (max-width: 800px)
+{
+    .mains {
+        grid-template-columns: 100vw 100vw;
+    }
 }

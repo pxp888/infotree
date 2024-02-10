@@ -160,7 +160,7 @@ function draw_node(data) {
         node.addClass('subgroup');
         node.click(subfolder_clicked);
         let name = data.path.split('/').pop();
-        node.find('.content').html('subgroup : ' + name);
+        node.find('.content').html(name);
     }
 
     let read = true;

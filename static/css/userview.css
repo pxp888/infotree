@@ -1,0 +1,10 @@
+
+#mains {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.user {
+    border: 1px solid black;
+}
