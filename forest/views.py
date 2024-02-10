@@ -195,7 +195,6 @@ def update(request):
     user = request.user
 
     if cache.get(user.username) is not None:
-        print('cache hit', user.username)
         return cache.get(user.username)
     else:
         nodes = []

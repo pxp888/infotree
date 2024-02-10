@@ -1,2 +1,21 @@
 # infotree
 tree based messaging 
+
+## Todo List
+
+*   THIS README. 
+*   Refresh folder list on deletions
+*   Account Page (change password, delete account)
+*   User Directory Page 
+*   View by User page
+*   Heroku Deployment
+
+
+### Maybe todo list
+*   Message read status display
+*   folders show unread count
+
+
+
+
+

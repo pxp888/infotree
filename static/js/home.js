@@ -324,14 +324,26 @@ function update() {
         let nodes = response.nodes;
         let folders = response.folders;
         let selected = $('.selected.folder').find('.node_id').html();
+        let ucount = {};
         $('.folder').not('.sample').removeClass('unread');
+        $('.folder .unread_count').html('0');
         for (let i = 0; i < nodes.length; i++) {
             if (parseInt(folders[i])===parseInt(selected)) {
                 get_node(nodes[i]);
             }
             let f = find_folder(folders[i])
-            if (f) { f.addClass('unread'); }
-            else { get_folder(folders[i]); }
+            if (!f) { get_folder(folders[i]); }
+            ucount[folders[i]] = ucount[folders[i]] ? ucount[folders[i]]+1 : 1;
+        }
+        let myfolders = $('.folder').not('.sample');
+        for (let i = 0; i < myfolders.length; i++) {
+            let folder = myfolders.eq(i);
+            let node_id = folder.find('.node_id').html();
+            let count = ucount[node_id] || 0;
+            if (count > 0) {
+                folder.addClass('unread');
+                folder.find('.unread_count').html(count);
+            }
         }
     }
 )};
