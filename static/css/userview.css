@@ -5,12 +5,14 @@
 #mains {
     display: flex;
     flex-direction: row;
+    height: calc(100svh - 60px);
 }
 
 #messlist {
     flex-grow: 1;
+    overflow-y: auto;
+    background-color: grey;
 }
-
 
 .user {
     border: 1px solid black;
@@ -20,16 +22,39 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
 
+    background-color: white;
     border: 1px solid var(--user_color);
+    margin: 5px;
+    
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.node p {
+    margin: 0;
 }
 
 .node .members {
     grid-column-start: 1;
     grid-column-end: 3;
+    
+    font-size: 13px;
+    color: var(--user_color);
 }
 
 .node .content {
     grid-column-start: 1;
     grid-column-end: 3;
+}
+
+.node .created_on {
+    justify-self: right;
+    font-size: 13px;
+    color: var(--user_color);
+}
+
+.node .author {
+    font-size: 13px;
+    color: var(--user_color);
 }
 
