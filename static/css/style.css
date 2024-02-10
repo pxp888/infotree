@@ -107,7 +107,7 @@ body {
 
 
 #group_editor {
-    padding: 5px;
+    /* padding: 5px; */
     background-color: var(--selected_color);
 }
 
@@ -189,7 +189,7 @@ body {
     background-color: var(--unread_color);
 }
 
-.node.subfolder {
+.node.subgroup {
     margin: 10px 75px 10px 75px;
     background-color: wheat;
 }

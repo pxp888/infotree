@@ -56,6 +56,7 @@ function select_folder(node_id) {
 
 
 function folder_clicked(event) {
+    say(event.target);
     let folder = $(event.target).closest('.folder');
     let node_id = folder.find('.node_id').html();
     select_folder(node_id);
@@ -112,13 +113,19 @@ function draw_folder(data) {
     folder.find('.path').html(data.path);
     folder.find('.members').html(data.members.join(', '));
 
-    
     if (new_folder) {
         folder.click(folder_clicked);
         $('#folderlist').append(folder);
     }
     order_folders();
     mark_read(data.node_id);
+}
+
+
+function subfolder_clicked(event) {
+    let folder = $(event.target).closest('.subgroup');
+    let node_id = folder.find('.node_id').html();
+    select_folder(node_id);
 }
 
 
@@ -146,13 +153,11 @@ function draw_node(data) {
     node.find('.members').html(members);
 
     if(data.folder===true) {
-        node.addClass('subfolder');
-        node.click(folder_clicked);
+        node.addClass('subgroup');
+        node.click(subfolder_clicked);
         let name = data.path.split('/').pop();
         node.find('.content').html('subgroup : ' + name);
-
     }
-
 
     let read = true;
     let index = data.members.indexOf(username);
