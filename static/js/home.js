@@ -2,6 +2,7 @@ const say = (...msgs) => console.log(...msgs);
 
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 const username = $('.username').first().text();
+let future_selected_folder = null;
 
 
 // helper functions
@@ -54,6 +55,9 @@ function select_folder(node_id) {
         $('#group_editor').removeClass('hidden');
         $('#add_member_line').focus();
     }
+    else {
+        future_selected_folder = node_id;
+    }
 
     $('.node').not('.sample').remove();
     get_nodes(node_id);
@@ -88,6 +92,7 @@ function order_folders() {
         }
     }
 }
+
 
 
 // ajax functions
@@ -232,6 +237,10 @@ function get_folder(node_id) {
         node_id: node_id,
     }, function(response) {
         draw_folder(response);
+        if (future_selected_folder === node_id) {
+            select_folder(node_id);
+            future_selected_folder = null;
+        }
     });
 }
 
