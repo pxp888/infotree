@@ -36,7 +36,7 @@ Each conversation group shows the count of unread messages.
 Messages are visually distinguished by color and margins between sent messages, recieved messages, unread messages, and sub-groups created.  
 
 ### AJAX Communications
-Interaction with the server on the main page is done through AJAX messaging to improve the user experience.  This avoids having to reload the page when changes are reflected.  
+Interaction with the server on the main page is done through AJAX messaging to improve the user experience.  
 
 ### Realtime updates
 There is continuous polling of the server to check for new messages.  The server caches replies to avoid database calls when it gets polled for updates without changes.
@@ -56,6 +56,7 @@ On smaller screens the panes expand to occupy the full width of smaller screens.
 *   Server unreachable notification
 *   Floating hints for control explanations
 
+<br><br>
 
 # Primary Interaction
 
@@ -88,6 +89,7 @@ WHen sub-groups are created they also show up in the message history, and can be
 ## Message Composition and Sending
 Messages are written in a textarea at the lower right side of the app. To send a message there is a button immediately below.  This enables messages to have line returns for more natural formatting.  
 
+<br><br>
 
 # Database Implementation
 The data is organized by two primary tables.  all message data itself is organized as a tree with branching nodes.  Messages are all children of a conversation or folder node.  Messages within a chat are siblings of each other.  Sub-groups are simply nodes that have further branches.  There is a flag set to distinguish between message nodes and group nodes, but this is only for the sake of the interface.  
@@ -163,6 +165,22 @@ The database tables are built as follows:
 |user|Target of node, (may be multiple targets per node)|
 |read|Boolean flag to indicate of the user has recieved the node
 
+<br><br>
+
+# General AJAX Information Flow
+
+There are essentially only two classes of information handled by the page.  Conversation groups are referred to as folders, and messages are nodes.  
+
+1)  __get_folders__ - the server returns a list of node_id's for each folder.  
+2) __get_folder__ - the server returns a single node with all folder data. 
+3) __folder_selected__ - the client then calls __get_nodes__. 
+4) __get_nodes__ - the server returns a list of node_id's for the current folder. 
+5) __get_node__ - the server returns a single node with all message data.  
+6) __mark_read__ - the client tells the server to mark nodes as read.  
+
+___Note___ - The __get_nodes__ call returns a fixed number of replies, and this is incremented when the user scrolls to the top of the message list.  This is to prevent fully loading a conversation every time the user views it.  
+
+
 
 ## Todo - features
 At this point of development message content is stored as plain text in the node database table.  
@@ -174,8 +192,7 @@ That would leave the node table solely responsible for organization, but not the
 
 # Deployment
 
-The site is hosted on Heroku for both web hosting and Postgres database hosting.  Originally I tried using the free tier of ElephantSQL but it seemed that the latency between the two hurt the user experience.  This was greatly improved by using Heroku for the database as well as the web hosting, but there are still latency issues that have become apparent when not using a locally hosted database.  
-
+The site is hosted on Heroku for both web hosting and Postgres database hosting.  Originally I tried using the free tier of ElephantSQL but it seemed that the latency between the two hurt the user experience.  This was greatly improved by using Heroku for the database as well as the web hosting.  
 
 
 # Todo List
@@ -192,3 +209,5 @@ The site is hosted on Heroku for both web hosting and Postgres database hosting.
 
 ### Maybe todo list
 *   Message read status display
+
+
