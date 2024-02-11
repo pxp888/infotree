@@ -6,6 +6,7 @@
     --unread_color: #fde5bb;
     --selected_color: #ffdca0;
     --nodefolder_color: #efc985;
+    --button_highlight_color: rgb(155, 80, 173);
 }
 
 body {
@@ -88,7 +89,7 @@ body {
 
 button {
     color: white;
-    background-color:rgb(96, 96, 129);
+    background-color:var(--top_color);
     appearance: none;
     border: none;
     padding: 6px;
@@ -96,11 +97,11 @@ button {
 }
 
 button:focus {
-    background-color:rgb(155, 80, 173);
+    background-color: var(--button_highlight_color);
 }
 
 button:hover {
-    background-color:rgb(155, 80, 173);
+    background-color: var(--button_highlight_color);
 }
 
 
