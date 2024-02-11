@@ -461,5 +461,5 @@ $('#send_message_button').click(send_message);
 
 get_folders();
 
-setInterval(update, 3000);
+setInterval(update, 5000);
 
