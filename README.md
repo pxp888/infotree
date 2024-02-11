@@ -33,6 +33,9 @@ Messages are visually distinguished by color and margins between sent messages, 
 ### AJAX Communications
 Interaction with the server on the main page is done through AJAX messaging to improve the user experience.  This avoids having to reload the page when changes are reflected.  
 
+### Realtime updates
+There is continuous polling of the server to check for new messages.  The server caches replies to avoid database calls when it gets polled for updates without changes.
+
 ### Mobile View
 On smaller screens the panes expand to occupy the full width of smaller screens.  Users can swipe sideways to move between viewing message groups and the chat view.  
 
@@ -40,6 +43,7 @@ On smaller screens the panes expand to occupy the full width of smaller screens.
 *   Error messaging - Users are alerted to input errors
     *   Adding non-existent group members
     *   Sending messages without recipients
+*   Server unreachable notification
 
 # Primary Interaction
 
