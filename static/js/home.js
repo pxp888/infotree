@@ -69,17 +69,23 @@ function folder_clicked(event) {
 
 function order_folders() {
     let folders = $('.folder').not('.sample');
+    let tops = {};
     for (let i = 0; i < folders.length; i++) {
         let folder = folders.eq(i);
+        let node_id = folder.find('.node_id').html();
         let base_id = folder.find('.base_id').html();
-        if (base_id === '-1') { continue; }
-        let base = find_folder(base_id);
-        if (base===null) { continue; }
-        base.after(folder);
+        tops[node_id] = base_id;
 
         let level = folder.find('.path').html().split('/').length;
         folder.css('margin-left', (level-1)*18+'px');
         folder.addClass('subfolder');
+    }
+    for (key in tops) {
+        if (tops[key] in tops) {
+            let base = find_folder(tops[key]);
+            let folder = find_folder(key);
+            base.after(folder);
+        }
     }
 }
 
@@ -119,7 +125,26 @@ function draw_folder(data) {
 
     if (new_folder) {
         folder.click(folder_clicked);
-        $('#folderlist').append(folder);
+        let folders = $('.folder').not('.sample');
+        if (folders.length ===0){
+            $('#folderlist').append(folder);
+        }
+        else {
+            let last_folder = folders.last();
+            let last_folder_id = last_folder.find('.node_id').html();
+            if (data.node_id > last_folder_id) {
+                $('#folderlist').append(folder);
+            }
+            else {
+                folders.each(function() {
+                    let folder_id = $(this).find('.node_id').html();
+                    if (data.node_id < folder_id) {
+                        $(this).before(folder);
+                        return false;
+                    }
+                });
+            }
+        }
     }
     order_folders();
     mark_read(data.node_id);
