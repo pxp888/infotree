@@ -3,9 +3,9 @@
     --user_color: rgb(52 58 66);
     --sent_color: rgb(216 215 215);
     --list_back_color: rgb(255 255 255);
-    --unread_color: #ffdca0;
+    --unread_color: #fde5bb;
     --selected_color: #ffdca0;
-    --nodefolder_color: #efc085;
+    --nodefolder_color: #efc985;
 }
 
 body {

@@ -59,8 +59,11 @@ button#delete_folder_button:hover {
 
 
 .folder {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     
     background-color: var(--list_back_color);
     padding: .5rem;
@@ -128,8 +131,10 @@ button#delete_folder_button:hover {
 }
 
 .listitem.node {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr; */
+    display: flex;
+    flex-direction: column;
     
     background-color: var(--list_back_color);
     border: 1px solid var(--user_color);
@@ -139,6 +144,12 @@ button#delete_folder_button:hover {
     
     padding: 10px;
     border-radius: 10px;
+}
+
+.listitem.node > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .node.sent_message {
@@ -168,7 +179,7 @@ button#delete_folder_button:hover {
 
 .node.subgroup {
     margin: 10px 75px 10px 75px;
-    background-color: wheat;
+    background-color: var(--nodefolder_color);
 }
 
 
