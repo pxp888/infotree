@@ -54,6 +54,7 @@ On smaller screens the panes expand to occupy the full width of smaller screens.
     *   Adding non-existent group members
     *   Sending messages without recipients
 *   Server unreachable notification
+*   Floating hints for control explanations
 
 
 # Primary Interaction
@@ -99,16 +100,22 @@ At the moment the interface does not allow the generation of message nodes with 
 graph LR
 
 a(group A)
-b1([message 1])
-b2(sub-group B)
-b3([message 2])
-b4([message 3])
-c1([message 4])
-c2([message 5])
-c3([message 6])
-d(group C) --- d2([message 7]) & d3([message 8])
+subgraph A
+    b1([message 1])
+    b2(sub-group B)
+    b3([message 2])
+    b4([message 3])
+end 
+
+subgraph B
+    c1([message 4])
+    c2([message 5])
+    c3([message 6])
+end
+
 a --- b1 & b2 & b3 & b4
 b2 --- c1 & c2 & c3
+
 ```
 
 ### To enable one-to-many messaging a second table records the targets of each node. 
