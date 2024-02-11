@@ -1,0 +1,149 @@
+:root {
+    --top_color: rgb(56 56 81);
+    --user_color: rgb(52 58 66);
+    --sent_color: rgb(216 215 215);
+    --list_back_color: rgb(255 255 255);
+    --unread_color: #fde5bb;
+    --selected_color: #ffdca0;
+    --nodefolder_color: #efc985;
+    --button_highlight_color: rgb(155, 80, 173);
+    --browser_back_color: rgb(99 98 122);
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none;
+    color: blue;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.sample {
+    display: none;
+}
+
+
+#top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    background-color: var(--top_color);
+    color: rgb(255, 255, 255);
+
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#top .logo {
+    text-decoration: none;
+    font-size: 2em;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    margin-top:12px;
+}
+
+#top div {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+#top .username {
+    margin: 12px 10px;
+}
+
+#top ul {
+    list-style-type: none;
+    margin: 12px 0;
+}
+
+#top li {
+    display: inline;
+}
+
+#top a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    margin: 0 10px;
+}
+
+#errorbar {
+    background-color: #bb4949;
+    color: white;
+    padding-left: 2rem;
+    font-weight: bold;
+
+    height: 30px;
+}
+
+#errorbar p {
+    margin: 6px;
+}
+
+
+button {
+    color: white;
+    background-color:var(--top_color);
+    appearance: none;
+    border: none;
+    padding: 6px;
+    transition: background-color .3s;
+}
+
+button:focus {
+    background-color: var(--button_highlight_color);
+}
+
+button:hover {
+    background-color: var(--button_highlight_color);
+}
+
+
+.genericForm {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    padding: .5rem .5rem;
+    border: 1px solid var(--user_color);
+}
+
+.genericLineForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-grow: 0;
+}
+
+.genericLineForm input {
+    height: 30px;
+}
+
+.genericLineForm textarea {
+    font-family: 'Roboto';
+    font-size: 1rem;
+}
+
+
+@media screen and (max-width: 800px)
+{
+    #top {
+        height: 60px;
+    }
+
+    #top .logo {
+        font-size: 1.5rem;
+    }
+
+    #top ul {
+        margin: 0;
+    }
+
+    #top .username {
+        margin: 0;
+    }
+}   
