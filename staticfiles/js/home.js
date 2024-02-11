@@ -164,6 +164,11 @@ function subfolder_clicked(event) {
 
 
 function draw_node(data) {
+    let parent_id = parseInt($('.folder.selected').find('.node_id').html());
+    if (data.base_id !== parent_id) { 
+        say(parent_id, data.base_id);
+        return; }
+
     let node;
     let new_node=true;
     let old = find_node(data.node_id);
@@ -306,7 +311,10 @@ function add_root_folder() {
 
 function delete_folder() {
     let node_id = $('.selected').find('.node_id').html();
-    if (node_id === '') { return; }
+    if (node_id === undefined) { 
+        alert('No group is selected to leave.');
+        return; }
+    
     let ok = confirm('Are you sure you want to leave this group?');
     if (!ok) { return; }
 
