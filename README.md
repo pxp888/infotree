@@ -183,12 +183,12 @@ The site is hosted on Heroku, with the database behind the app hosted by Elephan
 
 # Todo List
 
-*   THIS README. 
 *   Refresh folder list on deletions
 *   View by User page
 *   Heroku Deployment
 *   Separate content database
 *   Attachments
+*   Rich text input
 *   Message comments
 *   Search for group selection
 *   Search for messages
