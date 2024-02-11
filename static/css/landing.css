@@ -7,3 +7,15 @@
 .container {
     margin-left: 5rem;
 }
+
+.cover_image {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.cover_image img {
+    max-width: 70vw;
+}
+
