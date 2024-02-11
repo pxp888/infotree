@@ -1,4 +1,6 @@
 # infoTrees
+![Cover Image](READMEpics/Pasted%20image.png)
+
 This is a simple chat app.  The primary difference between this and similar apps is the ability to create sub-groups of chat topics.  This enables more fine-grained messaging and control with different groups and subjects. 
 
 
@@ -14,9 +16,12 @@ The left pane has the following fields:
 *   A text input for creating and naming sub-groups.  
 *   A button to leave a selected group.  
 
+![Message View](READMEpics/Pasted%20image%201.png)
 
 ### Chat view
 Messages are displayed on the main 
+
+![Chat View](READMEpics/Pasted%20image%202.png)
 
 ### Sub-groups
 Sub-groups may be created, each with different members.  The creation of a sub-group creates a clickable link in the chat view so that users can follow the conversation into the sub-groups.  
@@ -39,11 +44,17 @@ There is continuous polling of the server to check for new messages.  The server
 ### Mobile View
 On smaller screens the panes expand to occupy the full width of smaller screens.  Users can swipe sideways to move between viewing message groups and the chat view.  
 
+![Chat View](READMEpics/Pasted%20image%203.png)
+![Chat View](READMEpics/Pasted%20image%204.png)
+
+
+
 ## Minor Features
 *   Error messaging - Users are alerted to input errors
     *   Adding non-existent group members
     *   Sending messages without recipients
 *   Server unreachable notification
+
 
 # Primary Interaction
 
@@ -82,7 +93,43 @@ The data is organized by two primary tables.  all message data itself is organiz
 
 At the moment the interface does not allow the generation of message nodes with children, but the back-end does not prohibit this.  This can be implemented to allow comments on individual messages.  
 
-To enable one-to-many messaging a second table records the targets of each node. 
+### Messages and groups are stored as a tree of nodes
+
+```mermaid
+graph LR
+
+a(group A)
+b1([message 1])
+b2(sub-group B)
+b3([message 2])
+b4([message 3])
+c1([message 4])
+c2([message 5])
+c3([message 6])
+d(group C) --- d2([message 7]) & d3([message 8])
+a --- b1 & b2 & b3 & b4
+b2 --- c1 & c2 & c3
+```
+
+### To enable one-to-many messaging a second table records the targets of each node. 
+
+```mermaid 
+graph LR
+
+subgraph Node
+    a(Previous Node)
+    b(id \n Node base_id \n timestamp created_on \n User author \n text content \n Bool folder )
+end
+
+subgraph Target
+    c( id \n Node node \n User user \n Bool read)
+    d( id \n Node node \n User user \n Bool read)
+end
+a---b
+b --- c & d
+
+```
+
 
 The database tables are built as follows:
 
@@ -97,6 +144,8 @@ The database tables are built as follows:
 |author|User who created the node
 |content|Message content
 |folder|Boolean flag to indicate if the node represents a conversation group or folder
+
+
 
 ### Target Table
 
@@ -114,6 +163,11 @@ At this point of development message content is stored as plain text in the node
 The next step is to enable rich-text formatting and attachments.  This would ideally be implemented with another database or table that only stores the full content of each message.  
 
 That would leave the node table solely responsible for organization, but not the content itself.  Each node in the table would only store a reference to the full content.  
+
+
+# Deployment
+
+The site is hosted on Heroku, with the database behind the app hosted by ElephantSQL.  
 
 
 

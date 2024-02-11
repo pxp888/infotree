@@ -1,5 +1,5 @@
 :root {
-    --top_color: rgb(96, 96, 129);
+    --top_color: rgb(56 56 81);
     --user_color: rgb(52 58 66);
     --sent_color: rgb(216 215 215);
     --list_back_color: rgb(255 255 255);
@@ -7,6 +7,7 @@
     --selected_color: #ffdca0;
     --nodefolder_color: #efc985;
     --button_highlight_color: rgb(155, 80, 173);
+    --browser_back_color: rgb(99 98 122);
 }
 
 body {

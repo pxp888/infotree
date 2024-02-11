@@ -51,7 +51,7 @@ button#delete_folder_button:hover {
 /* BROWSER ITEMS -------------------------------------------------- */
 
 #browser {
-    background-color: rgb(131, 130, 151);
+    background-color: var(--browser_back_color);
     display: flex;
     flex-direction: column;
 }
