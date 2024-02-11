@@ -183,8 +183,12 @@ def send_message(request):
 def get_nodes(request):
     user = request.user
     base_id = request.POST.get('base_id')
-
-    targets = Target.objects.filter(user=user, node__base__id=base_id)
+    node_count = request.POST.get('node_count')
+    
+    node_count = int(node_count)
+    print('node_count:', node_count)
+    
+    targets = Target.objects.filter(user=user, node__base__id=base_id).order_by('-node_id')[node_count:node_count+25]
     nodes = []
     for target in targets:
         nodes.append(target.node.id)

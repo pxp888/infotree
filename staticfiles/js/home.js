@@ -218,6 +218,7 @@ function draw_node(data) {
             let last_node_id = last_node.find('.node_id').html();
             if (data.node_id > last_node_id) {
                 nodelist.append(node);
+                $('#nodelist').scrollTop($('#nodelist')[0].scrollHeight);
             }
             else {
                 nodes.each(function() {
@@ -231,7 +232,7 @@ function draw_node(data) {
         }
     }
 
-    $('#nodelist').scrollTop($('#nodelist')[0].scrollHeight);
+    
     mark_read(data.node_id);
 }
 
@@ -273,9 +274,11 @@ function get_folders() {
 
 
 function get_nodes(base_id) {
+    let node_count = $('.node').not('.sample').length;
     ajaxPost({
         action: 'get_nodes',
         base_id: base_id,
+        node_count: node_count,
     }, function(response) {
         let nodes = response.nodes;
         for (let i = 0; i < nodes.length; i++) {
@@ -283,6 +286,8 @@ function get_nodes(base_id) {
         }
     });
 }
+
+
 
 
 function add_root_folder() {
@@ -463,6 +468,15 @@ document.getElementById('sub_folder_line').addEventListener('keydown', function(
 
 $('#delete_folder_button').click(delete_folder);
 $('#send_message_button').click(send_message);
+
+let nodelist = $('#nodelist')[0];
+nodelist.addEventListener('scroll', function() {
+    // say('scrolling', nodelist.scrollTop);
+    if (nodelist.scrollTop === 0) {
+        let base_id = $('.selected').find('.node_id').html();
+        get_nodes(base_id);
+    }
+});
 
 
 get_folders();
