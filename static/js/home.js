@@ -53,7 +53,7 @@ function select_folder(node_id) {
     if (folder) {
         folder.addClass('selected');
         $('#group_editor').removeClass('hidden');
-        $('#add_member_line').focus();
+        // $('#add_member_line').focus();
     }
     else {
         future_selected_folder = node_id;
@@ -420,7 +420,7 @@ function update() {
             let node_id = folder.find('.node_id').html();
             let count = ucount[node_id] || 0;
             if (count > 0) {
-                folder.addClass('unread');
+                // folder.addClass('unread');
                 folder.find('.unread_count').html(count);
             }
         }

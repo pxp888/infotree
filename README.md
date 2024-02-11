@@ -174,10 +174,7 @@ That would leave the node table solely responsible for organization, but not the
 
 # Deployment
 
-The site is hosted on Heroku, with the database behind the app hosted by ElephantSQL.  
-
-
-
+The site is hosted on Heroku for both web hosting and Postgres database hosting.  Originally I tried using the free tier of ElephantSQL but it seemed that the latency between the two hurt the user experience.  This was greatly improved by using Heroku for the database as well as the web hosting, but there are still latency issues that have become apparent when not using a locally hosted database.  
 
 
 
