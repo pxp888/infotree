@@ -186,9 +186,15 @@ ___Note___ - The __get_nodes__ call returns a fixed number of replies, and this 
 ### Separate Content Database
 At this point of development message content is stored as plain text in the node database table.  
 
-The next step is to enable rich-text formatting and attachments.  This would ideally be implemented with another database or table that only stores the full content of each message.  
 
 That would leave the node table solely responsible for organization, but not the content itself.  Each node in the table would only store a reference to the full content.  
+
+### Rich Text message editing
+The next step is to enable rich-text formatting and attachments.  
+
+### Attachments
+This would ideally be implemented with a separate content database or server.  On the client side this should include a content preview. 
+
 
 ### View by User page
 I am currently developing a page where users can view messages from specific users across all conversations.  
