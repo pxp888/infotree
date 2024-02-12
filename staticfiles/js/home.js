@@ -179,6 +179,8 @@ function subfolder_clicked(event) {
 
 // create or update an element to represent a node
 function draw_node(data) {
+    let isAtBottom = nodelist.scrollHeight - nodelist.scrollTop === nodelist.clientHeight;
+
     let parent_id = parseInt($('.folder.selected').find('.node_id').html());
     if (data.base_id !== parent_id) { 
         say(parent_id, data.base_id);
@@ -233,7 +235,6 @@ function draw_node(data) {
             let last_node_id = last_node.find('.node_id').html();
             if (data.node_id > last_node_id) {
                 nodelist.append(node);
-                $('#nodelist').scrollTop($('#nodelist')[0].scrollHeight);
             }
             else {
                 nodes.each(function() {
@@ -247,6 +248,7 @@ function draw_node(data) {
         }
     }
 
+    if (isAtBottom) { nodelist.scrollTop = nodelist.scrollHeight; }
     mark_read(data.node_id);
 }
 
@@ -441,11 +443,11 @@ function update() {
         let selected = parseInt( $('.selected.folder').find('.node_id').html());
         unread_counts = {};
         for (let i=0; i < nodes.length; i++) {
-            if (selected === parseInt(folders[i])) { get_nodes(nodes[i]); }
-            if (folders[i] in unread_counts) {
-                unread_counts[folders[i]]++;
-            }
-            else { unread_counts[folders[i]]=1; }
+            if (selected === parseInt(folders[i])) { get_node(nodes[i]); }
+            if (folders[i] in unread_counts) 
+                { unread_counts[folders[i]]++; }
+            else 
+                { unread_counts[folders[i]]=1; }
         }
 
         $('.folder').not('.sample').removeClass('unread');
