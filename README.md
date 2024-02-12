@@ -4,6 +4,16 @@
 This is a simple chat app.  The primary difference between this and similar apps is the ability to create sub-groups of chat topics.  This enables more fine-grained messaging and control with different groups and subjects. 
 
 
+__Note__ - To play around with the app you'll need to create at least two accounts to send exchange messages between each other.  If you'd like to skip this step you can log in to these sample accounts below.  Please remember that I am not responsible for any content posted under these accounts.  
+
+|Username|Password|
+|-|-|
+|cat|mousefinder1|
+|dog|catfinder2|
+|bob|animalparent3|
+
+
+
 # Features
 
 ### Messaging Groups
@@ -204,7 +214,7 @@ I am currently developing a page where users can view messages from specific use
 
 The site is hosted on Heroku for both web hosting and Postgres database hosting.  Originally I tried using the free tier of ElephantSQL but it seemed that the latency between the two hurt the user experience.  This was greatly improved by using Heroku for the database as well as the web hosting.  
 
-Heroku is linked to the github repository, and deployments are triggered manually.  
+Heroku is linked to the github repository, and deployments are triggered manually from the main branch.  
 
 # Todo List
 
