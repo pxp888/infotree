@@ -453,7 +453,6 @@ function update() {
         for (let f in unread_counts) {
             let myfolder = find_folder(f);
             if (myfolder) {
-                say(myfolder[0], unread_counts[f]);
                 myfolder.find('.unread_count').html(unread_counts[f]);
                 myfolder.addClass('unread');
             }
