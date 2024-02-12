@@ -3,7 +3,7 @@ const say = (...msgs) => console.log(...msgs);
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 const username = $('.username').first().text();
 let future_selected_folder = null;
-
+let unread_counts = {};
 
 // This is a convenience function for AJAX calls.  
 function ajaxPost(data, successfunc) {
@@ -132,6 +132,15 @@ function draw_folder(data) {
     folder.find('.base_id').html(data.base_id);
     folder.find('.path').html(data.path);
     folder.find('.members').html(data.members.join(', '));
+
+    if (data.node_id in unread_counts) {
+        folder.find('.unread_count').html(unread_counts[data.node_id]);
+        folder.addClass('unread');
+    }
+    else {
+        folder.find('.unread_count').html('');
+        folder.removeClass('unread');
+    }
 
     if (new_folder) {
         folder.click(folder_clicked);
@@ -429,26 +438,27 @@ function update() {
     }, function(response) {
         let nodes = response.nodes;
         let folders = response.folders;
-        let selected = $('.selected.folder').find('.node_id').html();
-        let ucount = {};
-        $('.folder').not('.sample').removeClass('unread');
-        $('.folder .unread_count').html('0');
-        for (let i = 0; i < nodes.length; i++) {
-            if (parseInt(folders[i])===parseInt(selected)) {
-                get_node(nodes[i]);
+        let selected = parseInt( $('.selected.folder').find('.node_id').html());
+        unread_counts = {};
+        for (let i=0; i < nodes.length; i++) {
+            if (selected === parseInt(folders[i])) { get_nodes(nodes[i]); }
+            if (folders[i] in unread_counts) {
+                unread_counts[folders[i]]++;
             }
-            let f = find_folder(folders[i])
-            if (!f) { get_folder(folders[i]); }
-            ucount[folders[i]] = ucount[folders[i]] ? ucount[folders[i]]+1 : 1;
+            else { unread_counts[folders[i]]=1; }
         }
-        let myfolders = $('.folder').not('.sample');
-        for (let i = 0; i < myfolders.length; i++) {
-            let folder = myfolders.eq(i);
-            let node_id = folder.find('.node_id').html();
-            let count = ucount[node_id] || 0;
-            if (count > 0) {
-                folder.addClass('unread');
-                folder.find('.unread_count').html(count);
+
+        $('.folder').not('.sample').removeClass('unread');
+        $('.folder').not('.sample').find('.unread_count').html('');
+        for (let f in unread_counts) {
+            let myfolder = find_folder(f);
+            if (myfolder) {
+                say(myfolder[0], unread_counts[f]);
+                myfolder.find('.unread_count').html(unread_counts[f]);
+                myfolder.addClass('unread');
+            }
+            else {
+                get_folder(f);
             }
         }
     }

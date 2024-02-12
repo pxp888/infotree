@@ -3,9 +3,9 @@ const say = (...msgs) => console.log(...msgs);
 const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
 const username = $('.username').first().text();
 let future_selected_folder = null;
+let unread_counts = {};
 
-
-// helper functions
+// This is a convenience function for AJAX calls.  
 function ajaxPost(data, successfunc) {
 
     $.ajax({
@@ -26,6 +26,8 @@ function ajaxPost(data, successfunc) {
 }
 
 
+// This is a convience function to find either folder class items or 
+// node class items by their node_id attributes. 
 function find_object(node_id, type) {
     if (node_id === undefined) { return null; }
     let objects = $(type);
@@ -71,6 +73,8 @@ function folder_clicked(event) {
 }
 
 
+// this ensures that folders and subfolders are displayed in the correct order, 
+// and that subfolders are visually apparent as subfolders. 
 function order_folders() {
     let folders = $('.folder').not('.sample');
     let tops = {};
@@ -95,8 +99,8 @@ function order_folders() {
 
 
 
-// ajax functions
 
+// 
 function mark_read(node_id) {
     ajaxPost({
         action: 'mark_read',
@@ -107,6 +111,7 @@ function mark_read(node_id) {
 }
 
 
+// create or update an element to represent a folder
 function draw_folder(data) {
     let folder;
     let new_folder=true;
@@ -127,6 +132,15 @@ function draw_folder(data) {
     folder.find('.base_id').html(data.base_id);
     folder.find('.path').html(data.path);
     folder.find('.members').html(data.members.join(', '));
+
+    if (data.node_id in unread_counts) {
+        folder.find('.unread_count').html(unread_counts[data.node_id]);
+        folder.addClass('unread');
+    }
+    else {
+        folder.find('.unread_count').html('');
+        folder.removeClass('unread');
+    }
 
     if (new_folder) {
         folder.click(folder_clicked);
@@ -163,6 +177,7 @@ function subfolder_clicked(event) {
 }
 
 
+// create or update an element to represent a node
 function draw_node(data) {
     let parent_id = parseInt($('.folder.selected').find('.node_id').html());
     if (data.base_id !== parent_id) { 
@@ -232,11 +247,11 @@ function draw_node(data) {
         }
     }
 
-    
     mark_read(data.node_id);
 }
 
 
+// get data for a single folder from the server
 function get_folder(node_id) {
     ajaxPost({
         action: 'get_folder',
@@ -251,6 +266,7 @@ function get_folder(node_id) {
 }
 
 
+// get data for a single node from the server
 function get_node(node_id) {
     ajaxPost({
         action: 'get_node',
@@ -261,6 +277,7 @@ function get_node(node_id) {
 }
 
 
+// get a list of folders belonging to the user from the server
 function get_folders() {
     ajaxPost({
         action: 'get_folders',
@@ -273,6 +290,7 @@ function get_folders() {
 }
 
 
+// get a list of nodes for a given base node or folder
 function get_nodes(base_id) {
     let node_count = $('.node').not('.sample').length;
     ajaxPost({
@@ -288,8 +306,7 @@ function get_nodes(base_id) {
 }
 
 
-
-
+// create a top-level folder
 function add_root_folder() {
     const folder_name = $('#new_folder_line').val();
     if (folder_name === '') { return; }
@@ -314,6 +331,8 @@ function add_root_folder() {
 }
 
 
+// remove a folder from a users list of folders.  Note - the server 
+// will not delete the folder until all users have deleted the folder.
 function delete_folder() {
     let node_id = $('.selected').find('.node_id').html();
     if (node_id === undefined) { 
@@ -336,6 +355,7 @@ function delete_folder() {
 }
 
 
+// add a member to a folder or group.  
 function add_member() {
     let node_id = $('.selected').find('.node_id').html();
     if (node_id === undefined) {
@@ -363,6 +383,7 @@ function add_member() {
 }
 
 
+// create a subfolder for the currently selected folder
 function add_subfolder() {
     let base_id = $('.selected').find('.node_id').html();
     if (base_id === undefined) {
@@ -386,6 +407,7 @@ function add_subfolder() {
 }
 
 
+// create a node representing a message 
 function send_message() {
     let message = $('#new_message_line').val();
     if (message === '') {
@@ -407,6 +429,7 @@ function send_message() {
 }
 
 
+// check the server for unread messages
 function update() {
     let node_id = $('.selected').find('.node_id').html();
     ajaxPost({
@@ -415,26 +438,27 @@ function update() {
     }, function(response) {
         let nodes = response.nodes;
         let folders = response.folders;
-        let selected = $('.selected.folder').find('.node_id').html();
-        let ucount = {};
-        $('.folder').not('.sample').removeClass('unread');
-        $('.folder .unread_count').html('0');
-        for (let i = 0; i < nodes.length; i++) {
-            if (parseInt(folders[i])===parseInt(selected)) {
-                get_node(nodes[i]);
+        let selected = parseInt( $('.selected.folder').find('.node_id').html());
+        unread_counts = {};
+        for (let i=0; i < nodes.length; i++) {
+            if (selected === parseInt(folders[i])) { get_nodes(nodes[i]); }
+            if (folders[i] in unread_counts) {
+                unread_counts[folders[i]]++;
             }
-            let f = find_folder(folders[i])
-            if (!f) { get_folder(folders[i]); }
-            ucount[folders[i]] = ucount[folders[i]] ? ucount[folders[i]]+1 : 1;
+            else { unread_counts[folders[i]]=1; }
         }
-        let myfolders = $('.folder').not('.sample');
-        for (let i = 0; i < myfolders.length; i++) {
-            let folder = myfolders.eq(i);
-            let node_id = folder.find('.node_id').html();
-            let count = ucount[node_id] || 0;
-            if (count > 0) {
-                folder.addClass('unread');
-                folder.find('.unread_count').html(count);
+
+        $('.folder').not('.sample').removeClass('unread');
+        $('.folder').not('.sample').find('.unread_count').html('');
+        for (let f in unread_counts) {
+            let myfolder = find_folder(f);
+            if (myfolder) {
+                say(myfolder[0], unread_counts[f]);
+                myfolder.find('.unread_count').html(unread_counts[f]);
+                myfolder.addClass('unread');
+            }
+            else {
+                get_folder(f);
             }
         }
     }
@@ -447,6 +471,7 @@ $('.genericLineForm').submit(function(event) {
 });
 
 
+// Event Listeners
 document.getElementById('new_folder_line').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         add_root_folder();
@@ -475,7 +500,6 @@ $('#send_message_button').click(send_message);
 
 let nodelist = $('#nodelist')[0];
 nodelist.addEventListener('scroll', function() {
-    // say('scrolling', nodelist.scrollTop);
     if (nodelist.scrollTop === 0) {
         let base_id = $('.selected').find('.node_id').html();
         get_nodes(base_id);
@@ -483,6 +507,7 @@ nodelist.addEventListener('scroll', function() {
 });
 
 
+// Initialize page
 get_folders();
 
 setInterval(update, 5000);
