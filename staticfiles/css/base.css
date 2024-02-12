@@ -114,20 +114,40 @@ button:hover {
 }
 
 .genericLineForm {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    /* grid-template-columns: 1fr; */
     flex-grow: 0;
 }
 
 .genericLineForm input {
     height: 30px;
+    flex-grow: 1;
 }
 
 .genericLineForm textarea {
+    flex-grow: 1;
     font-family: 'Roboto';
     font-size: 1rem;
 }
 
+.line_button {
+    display: flex;
+    flex-direction: row;
+}
+
+.line_button button {
+    width: 110px;
+    color: black;
+    background-color: #dddddd;
+    border-top: 1px solid var(--user_color);
+    border-bottom: 1px solid var(--user_color);
+}
+
+.line_button button:hover {
+    color: white;
+    background-color: gray;
+}
 
 @media screen and (max-width: 800px)
 {

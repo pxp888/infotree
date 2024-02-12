@@ -465,9 +465,13 @@ document.getElementById('sub_folder_line').addEventListener('keydown', function(
     }
 });
 
+$('#new_folder_button').click(add_root_folder);
+$('#add_member_button').click(add_member);
+$('#sub_folder_button').click(add_subfolder);
 
 $('#delete_folder_button').click(delete_folder);
 $('#send_message_button').click(send_message);
+
 
 let nodelist = $('#nodelist')[0];
 nodelist.addEventListener('scroll', function() {

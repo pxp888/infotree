@@ -13,11 +13,16 @@
     </div>
     <div class="mains">
         <div class="mainsection" id="browser">
+            <div id="newlinediv" class="show">
+                <form action="POST" class="genericLineForm">
+                    {% csrf_token %}
+                    <div class="line_button">
+                        <input type="text" id="new_folder_line" placeholder="Search or Start New Group">
+                        <button type="button" id="new_folder_button">New Group</button>
+                    </div>
+                </form>
+            </div>
 
-            <form action="POST" class="genericLineForm" id="create_group_form">
-                {% csrf_token %}
-                <input type="text" id="new_folder_line" placeholder="Search or Start New Group">
-            </form>
             <div class="itemlist" id="folderlist">
                 <div class="listitem folder sample">
                     <div class="namediv">
@@ -33,8 +38,15 @@
             <div id="group_editor" class="show">
                 <form action="POST" class="genericLineForm">
                     {% csrf_token %}
-                    <input type="text" id="add_member_line" placeholder="Add Group Member">
-                    <input type="text" id="sub_folder_line" placeholder="Create Sub-Group">
+                    
+                    <div class="line_button">
+                        <input type="text" id="add_member_line" placeholder="Add Group Member">
+                        <button type="button" id="add_member_button">Add Member</button>
+                    </div>
+                    <div class="line_button">
+                        <input type="text" id="sub_folder_line" placeholder="Create Sub-Group">
+                        <button type="button" id="sub_folder_button">Add Sub-Group</button>
+                    </div>
                     <button type="button" id="delete_folder_button">Leave Group</button>
                 </form>
             </div>
@@ -66,6 +78,6 @@
     
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static 'js/home.js' %}"></script>
-    <script src="{% static 'js/home_helpers.js' %}"></script>
+    <!-- <script src="{% static 'js/home_helpers.js' %}"></script> -->
 {% endblock %}
 
