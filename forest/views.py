@@ -5,9 +5,10 @@ from django.core.cache import cache
 
 from .models import Node, Target
 
+'''the funcs dict holds ajax functions that are called from the homepage view'''
 funcs = {}
 
-# Create your views here.
+'''this serves the home page'''
 def homepage(request):
     if not request.user.is_authenticated:
         return render(request, 'forest/landing.html')
@@ -29,6 +30,7 @@ def homepage(request):
     return render(request, 'forest/home.html', context)
 
 
+'''send all relevant information for a single node'''
 def send_node(node_id):
     node = get_object_or_404(Node, pk=node_id)
     members = []
@@ -53,6 +55,7 @@ def send_node(node_id):
     return JsonResponse(response)
 
 
+'''create a top level folder node'''
 def add_root_folder(request):
     author = request.user
     path = request.POST.get('path')
@@ -65,6 +68,7 @@ def add_root_folder(request):
     return send_node(node.id)
 
 
+'''create a folder node with a parent node'''
 def add_subfolder(request):
     author = request.user
     path = request.POST.get('path')
@@ -78,6 +82,7 @@ def add_subfolder(request):
     return send_node(node.id)
 
 
+'''return a list of folder nodes that belong to the user'''
 def get_folders(request):
     user = request.user
     targets = Target.objects.filter(user=user, node__folder=True)
@@ -91,12 +96,14 @@ def get_folders(request):
     return JsonResponse(response)
 
 
+'''return data for a single folder node'''
 def get_folder(request):
     user = request.user
     node_id = request.POST.get('node_id')
     return send_node(node_id)
 
 
+'''remove a users association with a folder node, and delete the node if no users remain'''
 def delete_folder(request):
     user = request.user
     node_id = request.POST.get('node_id')
@@ -127,6 +134,7 @@ def delete_folder(request):
     return JsonResponse(response)
 
 
+'''add a user to a folder node'''
 def add_member(request):
     node_id = request.POST.get('node_id')
     member = request.POST.get('member')
@@ -157,6 +165,7 @@ def add_member(request):
     return send_node(node_id)
 
 
+'''create a message node, and target entries for each targeted user'''
 def send_message(request):
     user = request.user
     content = request.POST.get('content')
@@ -180,6 +189,7 @@ def send_message(request):
     return send_node(node.id)
 
 
+'''return a list of nodes for a given parent node'''
 def get_nodes(request):
     user = request.user
     base_id = request.POST.get('base_id')
@@ -200,11 +210,13 @@ def get_nodes(request):
     return JsonResponse(response)
 
 
+'''return data for a single node'''
 def get_node(request):
     node_id = request.POST.get('node_id')
     return send_node(node_id)
 
 
+'''check if a user has unread nodes'''
 def update(request):
     user = request.user
 
@@ -227,6 +239,7 @@ def update(request):
         return JsonResponse(response)
 
 
+'''mark a target entry as read by user'''
 def mark_read(request):
     user = request.user
     node_id = request.POST.get('node_id')

@@ -53,8 +53,7 @@ On smaller screens the panes expand to occupy the full width of smaller screens.
 *   Error messaging - Users are alerted to input errors
     *   Adding non-existent group members
     *   Sending messages without recipients
-*   Server unreachable notification
-*   Floating hints for control explanations
+*   Server unreachable notification - a banner is displayed to the user when AJAX messages are not responded to.  
 
 <br><br>
 
@@ -183,17 +182,23 @@ ___Note___ - The __get_nodes__ call returns a fixed number of replies, and this 
 
 
 ## Todo - features
+
+### Separate Content Database
 At this point of development message content is stored as plain text in the node database table.  
 
 The next step is to enable rich-text formatting and attachments.  This would ideally be implemented with another database or table that only stores the full content of each message.  
 
 That would leave the node table solely responsible for organization, but not the content itself.  Each node in the table would only store a reference to the full content.  
 
+### View by User page
+I am currently developing a page where users can view messages from specific users across all conversations.  
+
 
 # Deployment
 
 The site is hosted on Heroku for both web hosting and Postgres database hosting.  Originally I tried using the free tier of ElephantSQL but it seemed that the latency between the two hurt the user experience.  This was greatly improved by using Heroku for the database as well as the web hosting.  
 
+Heroku is linked to the github repository, and deployments are triggered manually.  
 
 # Todo List
 

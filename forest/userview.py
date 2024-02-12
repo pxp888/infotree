@@ -5,9 +5,13 @@ from django.core.cache import cache
 
 from .models import Node, Target
 
+
+'''THIS PAGE IS A WORK-IN-PROGRESS, and not linked to by any link on the primary site.'''
+
+
 funcs = {}
 
-# Create your views here.
+
 def userpage(request):
     if not request.user.is_authenticated:
         return render(request, 'forest/landing.html')
